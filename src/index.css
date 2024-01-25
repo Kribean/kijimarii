@@ -20,3 +20,27 @@ code {
 .textWinterSoul {
   font-family: wintersoul;
 }
+
+.bg-box {
+  background-image: url(./assets/box.jpg);
+}
+
+.bg-body-transp {
+  background-color: rgb(245, 238, 230, 0.85);
+}
+
+.bg-chat-user {
+  background-color: #fbfbfb !important;
+}
+
+.bg-chat-receiver {
+  background-color: #dcf8c7 !important;
+}
+
+.bg-chat {
+  background-color: #eae4de !important;
+}
+
+.bg-chat-container {
+  background-color: #f4ede4 !important;
+}

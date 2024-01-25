@@ -23,10 +23,10 @@ export default function Header() {
   }, []);
 
   const handleGoToListContact = () => {
-    popoverMyContacts && navigate("/list-contacts");
+    navigate("/list-contacts");
   };
   const handleGoToMsg = () => {
-    popoverMyMails && navigate("/messanger");
+    navigate("/messanger");
   };
   const handleGoToDashboard = () => {
     navigate("/home-user");
@@ -60,6 +60,7 @@ export default function Header() {
               overlay={
                 <Popover
                   id="popover-basic"
+                  style={{ zIndex: 50 }}
                   onClick={() => {
                     setPopoverMyContacts(false);
                   }}
@@ -93,6 +94,7 @@ export default function Header() {
           overlay={
             <Popover
               id="popover-basic-2"
+              style={{ zIndex: 50 }}
               onClick={() => {
                 setPopoverMyMails(false);
               }}

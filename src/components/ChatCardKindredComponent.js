@@ -1,9 +1,14 @@
-import { Col, Row, Image } from "react-bootstrap";
+import { Col, Row, Image, Container } from "react-bootstrap";
 import halleBerry from "../assets/Halle-Berry.jpg";
 
-export default function ChatCardKindredComponent() {
+export default function ChatCardKindredComponent(props) {
   return (
-    <>
+    <Container
+      fluid
+      onClick={() => {
+        props.setIsContactTrigger(false);
+      }}
+    >
       <Row className="text-wrap shadow bg-white rounded m-2">
         <Col md={2} xs={12} className="p-0">
           <Image width={42} src={halleBerry} fluid roundedCircle />
@@ -13,6 +18,6 @@ export default function ChatCardKindredComponent() {
           <p>aaaaaaaaaaaaaa</p>
         </Col>
       </Row>
-    </>
+    </Container>
   );
 }

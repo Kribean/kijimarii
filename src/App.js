@@ -10,13 +10,14 @@ import HomePage from "./pages/HomePage";
 import ShareUserToFriendPage from "./pages/ShareUserToFriendPage";
 import CoupleCartoon from "./assets/couple_cartoon.jpg";
 import LoginPage from "./pages/LoginPage";
-import Header from "./components/Header";
 import UserPage from "./pages/UserPage";
 import CreateProfilSuccessPage from "./pages/CreateProfilSuccessPage";
 import KindredSpiritsPage from "./pages/KindredSpiritsPage";
 import ChartPage from "./pages/ChartPage";
 import FriendSidePage from "./pages/FriendSidePage";
 import DateSidePage from "./pages/DateSidePage";
+import ShareFriendToFriendPage from "./pages/ShareFriendToFriendPage";
+import ShareToKindredPage from "./pages/ShareToKindredPage";
 
 function App() {
   return (
@@ -36,6 +37,11 @@ function App() {
           path="/send-to-my-friends"
           element={<ShareUserToFriendPage />}
         ></Route>
+        <Route
+          path="/friends-network"
+          element={<ShareFriendToFriendPage />}
+        ></Route>
+        <Route path="/interested" element={<ShareToKindredPage />}></Route>
       </Routes>
     </Container>
   );

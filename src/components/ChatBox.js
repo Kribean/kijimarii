@@ -3,19 +3,28 @@ import { Container, Row } from "react-bootstrap";
 export default function ChatBox({ isUser, content, date }) {
   return (
     <Container
-      className=" shadow my-4 "
+      className={
+        isUser
+          ? " mb-2 bg-chat-user text-dark shadow my-4 rounded "
+          : " text-dark mb-2 bg-chat-receiver shadow my-4 rounded "
+      }
       style={{
         marginRight: isUser ? "20px " : "0 ",
         marginLeft: isUser ? "0px " : "20px",
       }}
       fluid
     >
-      <Row className={isUser ? "mb-2 bg-primary text-white " : "mb-2 bg-light"}>
-        <p className="m-0 p-0">{content}</p>
+      <Row>
+        <p className="m-2 p-0 text-break">{content}</p>
       </Row>
 
       <Row>
-        <p> {date}</p>
+        <p
+          className="m-2 p-0 "
+          style={{ fontWeight: "bold", fontSize: "12px" }}
+        >
+          {date}
+        </p>
       </Row>
     </Container>
   );
