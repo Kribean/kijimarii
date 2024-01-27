@@ -4,12 +4,12 @@ import { useState } from "react";
 import ModalDate from "../../components/ModalDate";
 
 export default function DateSidePage() {
-  const [user, setUser] = useState();
+  const user = null;
 
   const [modalShow, setModalShow] = useState(false);
   return (
     <Container fluid>
-      {user ? (
+      {!user ? (
         <></>
       ) : (
         <>

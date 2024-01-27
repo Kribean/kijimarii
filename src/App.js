@@ -1,23 +1,16 @@
-import { useState } from "react";
-import Badge from "react-bootstrap/Badge";
-import Button from "react-bootstrap/Button";
-import { Image, Navbar, Container, Nav, NavDropdown } from "react-bootstrap";
-import { CopyToClipboard } from "react-copy-to-clipboard";
+import { Container } from "react-bootstrap";
 import { Routes, Route } from "react-router-dom";
 import ProfilPage from "./pages/ProfilPage";
 import MessagePage from "./pages/MessagePage";
 import HomePage from "./pages/HomePage";
 import ShareUserToFriendPage from "./pages/ShareUserToFriendPage";
-import CoupleCartoon from "./assets/couple_cartoon.jpg";
 import LoginPage from "./pages/LoginPage";
 import UserPage from "./pages/UserPage";
 import CreateProfilSuccessPage from "./pages/CreateProfilSuccessPage";
 import KindredSpiritsPage from "./pages/KindredSpiritsPage";
-import ChartPage from "./pages/ChartPage";
-import FriendSidePage from "./pages/FriendSidePage";
-import DateSidePage from "./pages/DateSidePage";
 import ShareFriendToFriendPage from "./pages/ShareFriendToFriendPage";
 import ShareToKindredPage from "./pages/ShareToKindredPage";
+// eslint-disable-next-line no-unused-vars
 import firebase from "./FirebaseConfig.js";
 
 function App() {

@@ -1,12 +1,12 @@
 import { Badge, Card, Container, Form, Row } from "react-bootstrap";
 import Header from "../../components/Header";
 import ProfileCompletedComponent from "../../components/ProfileCompletedComponent";
-import ModalFirstConnexion from "../../components/ModalFirstConnexion";
 import { useState } from "react";
 import FirstConnexionComponent from "../../components/FirstConnexionComponent";
 import HeaderNoName from "../../components/HeaderNoName";
 
 export default function UserPage() {
+  // eslint-disable-next-line no-unused-vars
   const [showFirstConnexion, setShowFirstConnexion] = useState(true);
   const [nameUser, setNameUser] = useState("");
   return (

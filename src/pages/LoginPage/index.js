@@ -2,7 +2,6 @@ import { Button, Image, Row, Col, Container } from "react-bootstrap";
 import googleImg from "../../assets/google-svg.svg";
 import doorPng from "../../assets/key.jpg";
 import { useNavigate } from "react-router-dom";
-import Header from "../../components/Header";
 
 export default function LoginPage() {
   const navigate = useNavigate();
