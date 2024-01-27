@@ -1,6 +1,5 @@
 import { Button, Image, FloatingLabel, Form, Row, Card } from "react-bootstrap";
 import bookPng from "../assets/book.jpg";
-import addFilePng from "../assets/add-file.png";
 import { useState } from "react";
 
 export default function FirstConnexionComponent({ nameUser, setNameUser }) {
