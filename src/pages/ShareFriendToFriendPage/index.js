@@ -11,6 +11,7 @@ import ClipBoardComponent from "../../components/ClipBoardComponent";
 import { useState } from "react";
 import UserCardComponent from "../../components/UserCardComponent";
 import HeaderFriend from "../../components/HeaderFriend";
+import FinishComponent from "../../components/FinishComponent";
 
 export default function ShareFriendToFriendPage() {
   const [show, setShow] = useState(false);
@@ -133,6 +134,7 @@ export default function ShareFriendToFriendPage() {
           </Toast.Body>
         </Toast>
       </ToastContainer>
+      <FinishComponent />
     </Container>
   );
 }

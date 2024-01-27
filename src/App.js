@@ -18,6 +18,7 @@ import FriendSidePage from "./pages/FriendSidePage";
 import DateSidePage from "./pages/DateSidePage";
 import ShareFriendToFriendPage from "./pages/ShareFriendToFriendPage";
 import ShareToKindredPage from "./pages/ShareToKindredPage";
+import firebase from "./FirebaseConfig.js";
 
 function App() {
   return (

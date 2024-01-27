@@ -1,4 +1,4 @@
-import { Badge, Card, Container } from "react-bootstrap";
+import { Badge, Card, Container, Form, Row } from "react-bootstrap";
 import Header from "../../components/Header";
 import ProfileCompletedComponent from "../../components/ProfileCompletedComponent";
 import ModalFirstConnexion from "../../components/ModalFirstConnexion";
@@ -15,6 +15,15 @@ export default function UserPage() {
         <>
           <Header isNameExisted={true} />
           <h1 className="display-4">Tableau de bord</h1>
+          <Row className="align-self-center">
+            <Form className="justify-content-center">
+              <Form.Check // prettier-ignore
+                type="switch"
+                id="custom-switch"
+                label="Activé l'expérience"
+              />
+            </Form>
+          </Row>
           <ProfileCompletedComponent />
 
           <Card>
