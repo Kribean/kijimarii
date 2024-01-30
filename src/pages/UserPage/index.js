@@ -1,14 +1,23 @@
 import { Badge, Card, Container, Form, Row } from "react-bootstrap";
 import Header from "../../components/Header";
 import ProfileCompletedComponent from "../../components/ProfileCompletedComponent";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import FirstConnexionComponent from "../../components/FirstConnexionComponent";
 import HeaderNoName from "../../components/HeaderNoName";
+import FirebaseFirestoreService from "../../FirebaseFirestoreService";
+import UserContext from "../../UserContext";
 
 export default function UserPage() {
   // eslint-disable-next-line no-unused-vars
   const [showFirstConnexion, setShowFirstConnexion] = useState(true);
   const [nameUser, setNameUser] = useState("");
+
+  const { userData, setUserData } = useContext(UserContext);
+
+  useEffect(() => {
+    console.log(userData, "doton");
+  }, []);
+
   return (
     <Container fluid>
       {nameUser.length > 2 ? (
@@ -21,6 +30,7 @@ export default function UserPage() {
                 type="switch"
                 id="custom-switch"
                 label="Activé l'expérience"
+                className="fs-4 mr-4"
               />
             </Form>
           </Row>

@@ -8,15 +8,41 @@ import {
   Alert,
 } from "react-bootstrap";
 import mailSvg from "../assets/mail-svg.svg";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import FirebaseAuthService from "../FirebaseAuthService";
+import UserContext from "../UserContext";
+import FirebaseFirestoreService from "../FirebaseFirestoreService";
 
 export default function Header() {
+  const { userData, setUserData } = useContext(UserContext);
   const [popoverMyContacts, setPopoverMyContacts] = useState(false);
   const [popoverMyMails, setPopoverMyMails] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (window.localStorage.getItem("kijimariiUid")) {
+      console.log("je suis rentré");
+      const queries = [
+        {
+          field: "uidAuthor",
+          condition: "==",
+          value: window.localStorage.getItem("kijimariiUid"),
+        },
+      ];
+      FirebaseFirestoreService.readDocuments({
+        collection: "userKijimarii",
+        queries: queries,
+      })
+        .then((data) => {
+          setUserData(data.docs[0].data());
+          console.log("doom", data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+
     setTimeout(() => {
       setPopoverMyMails(true);
       setPopoverMyContacts(true);
@@ -32,6 +58,17 @@ export default function Header() {
   const handleGoToDashboard = () => {
     navigate("/home-user");
   };
+  function handleLogout() {
+    FirebaseAuthService.logoutUser()
+      .then(() => {
+        setUserData(null);
+        localStorage.removeItem("kijimariiUid");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   return (
     <>
       <Row className="bg-dark text-white text-center justify-content-center align-items-center">
@@ -119,9 +156,27 @@ export default function Header() {
               <span className="badge badge-primary">9</span>
             </Button>
           </OverlayTrigger>
-          <Button className="m-4" variant={"danger"}>
-            Se déconnecter
-          </Button>
+          {!userData ? (
+            <Button
+              variant="success"
+              className="m-4"
+              onClick={() => {
+                navigate("/signin");
+              }}
+            >
+              Se connecter
+            </Button>
+          ) : (
+            <Button
+              onClick={() => {
+                handleLogout();
+              }}
+              className="m-4"
+              variant={"danger"}
+            >
+              Se déconnecter
+            </Button>
+          )}
         </Col>
       </Row>
       <Row className="m-4">

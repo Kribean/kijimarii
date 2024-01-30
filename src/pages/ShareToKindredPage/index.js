@@ -15,8 +15,12 @@ import doorPng from "../../assets/key.jpg";
 import HeaderFriend from "../../components/HeaderFriend";
 import ModalChart from "../../components/ModalChart";
 import FinishComponent from "../../components/FinishComponent";
+import { useContext } from "react";
+import UserContext from "../../UserContext";
+import FirebaseAuthService from "../../FirebaseAuthService";
 
 export default function ShareToKindredPage() {
+  const { userData, setUserData } = useContext(UserContext);
   const navigate = useNavigate();
   const handleNavigation = () => {
     navigate("/home-user/?uuid=5646-e");
@@ -24,6 +28,19 @@ export default function ShareToKindredPage() {
 
   const [modalShow, setModalShow] = useState(false);
   const [nextPage, setNextPage] = useState(false);
+
+  async function handleLoginWithGoogle() {
+    try {
+      const response = await FirebaseAuthService.loginWithGoogle();
+      if (response?.user) {
+        handleNavigation();
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+  FirebaseAuthService.subscribeToAuthChanges(setUserData);
+
   return (
     <Container
       className="bg-box justify-content-center align-items-center"
@@ -107,7 +124,7 @@ export default function ShareToKindredPage() {
                 size="md"
                 className="w-25 my-4 mx-2"
                 onClick={() => {
-                  handleNavigation();
+                  handleLoginWithGoogle();
                 }}
               >
                 <Row className="justify-content-start align-items-center">

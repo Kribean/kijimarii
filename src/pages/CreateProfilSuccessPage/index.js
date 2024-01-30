@@ -8,6 +8,7 @@ export default function CreateProfilSuccessPage() {
   const handleGoToShare = () => {
     navigate("/send-to-my-friends");
   };
+
   return (
     <Container fluid>
       <Header />
