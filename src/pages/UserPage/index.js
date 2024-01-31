@@ -10,20 +10,18 @@ import UserContext from "../../UserContext";
 export default function UserPage() {
   // eslint-disable-next-line no-unused-vars
   const [showFirstConnexion, setShowFirstConnexion] = useState(true);
-  const [nameUser, setNameUser] = useState("");
 
   const { userData, setUserData } = useContext(UserContext);
 
-  useEffect(() => {
-    console.log(userData, "doton");
-  }, []);
-
   return (
     <Container fluid>
-      {nameUser.length > 2 ? (
+      {userData?.name ? (
         <>
           <Header isNameExisted={true} />
-          <h1 className="display-4">Tableau de bord</h1>
+          <Row className="justify-content-center">
+            <h1 className="display-4">Tableau de bord</h1>
+          </Row>
+          <p className="lead">Bienvenue {userData.name} 😀</p>
           <Row className="align-self-center">
             <Form className="justify-content-center">
               <Form.Check // prettier-ignore
@@ -67,10 +65,7 @@ export default function UserPage() {
       ) : (
         <>
           <HeaderNoName />
-          <FirstConnexionComponent
-            nameUser={nameUser}
-            setNameUser={setNameUser}
-          />
+          <FirstConnexionComponent />
         </>
       )}
     </Container>

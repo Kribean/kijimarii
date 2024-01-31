@@ -15,7 +15,8 @@ import UserContext from "../UserContext";
 import FirebaseFirestoreService from "../FirebaseFirestoreService";
 
 export default function Header() {
-  const { userData, setUserData } = useContext(UserContext);
+  const { userData, setUserData, userDataId, setUserDataId } =
+    useContext(UserContext);
   const [popoverMyContacts, setPopoverMyContacts] = useState(false);
   const [popoverMyMails, setPopoverMyMails] = useState(false);
   const navigate = useNavigate();
@@ -36,7 +37,7 @@ export default function Header() {
       })
         .then((data) => {
           setUserData(data.docs[0].data());
-          console.log("doom", data);
+          setUserDataId(data.docs[0].id);
         })
         .catch((error) => {
           console.log(error);
@@ -62,6 +63,7 @@ export default function Header() {
     FirebaseAuthService.logoutUser()
       .then(() => {
         setUserData(null);
+        setUserDataId(null);
         localStorage.removeItem("kijimariiUid");
       })
       .catch((error) => {

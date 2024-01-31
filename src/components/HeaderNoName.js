@@ -6,7 +6,8 @@ import { useContext, useEffect } from "react";
 import FirebaseFirestoreService from "../FirebaseFirestoreService";
 
 export default function HeaderNoName() {
-  const { userData, setUserData } = useContext(UserContext);
+  const { userData, setUserData, userDataId, setUserDataId } =
+    useContext(UserContext);
   const navigate = useNavigate();
 
   const handleGoToDashboard = () => {
@@ -16,6 +17,7 @@ export default function HeaderNoName() {
     FirebaseAuthService.logoutUser()
       .then(() => {
         setUserData(null);
+        setUserDataId(null);
         localStorage.removeItem("kijimariiUid");
         navigate("/");
       })
@@ -40,6 +42,7 @@ export default function HeaderNoName() {
       })
         .then((data) => {
           setUserData(data.docs[0].data());
+          setUserDataId(data.docs[0].id);
         })
         .catch((error) => {
           console.log(error);

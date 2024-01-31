@@ -46,11 +46,12 @@ export default function LoginPage() {
             perimeter: 0,
             isSessionActive: true,
             photoUrl: null,
-            tabHobbies: [],
+            tabHobbies: "",
             religion: "",
             isReligionRelevant: false,
             agePartnerMin: 35,
             agePartnerMax: 35,
+            tabHumanValues: "",
             descriptionPartner: "",
           })
             .then(() => {

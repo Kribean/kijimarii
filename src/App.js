@@ -17,10 +17,13 @@ import { useState } from "react";
 
 function App() {
   const [userData, setUserData] = useState(null);
+  const [userDataId, setUserDataId] = useState(null);
 
   return (
     <Container className="w-100 m-0 p-0" fluid>
-      <UserContext.Provider value={{ userData, setUserData }}>
+      <UserContext.Provider
+        value={{ userData, setUserData, userDataId, setUserDataId }}
+      >
         <Routes>
           <Route path="/" element={<HomePage />}></Route>
           <Route path="/signin" element={<LoginPage />}></Route>

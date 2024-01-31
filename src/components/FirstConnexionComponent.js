@@ -10,33 +10,31 @@ import {
   ToastContainer,
 } from "react-bootstrap";
 import bookPng from "../assets/book.jpg";
-import { useState } from "react";
+import { useState, useContext } from "react";
+import FirebaseFirestoreService from "../FirebaseFirestoreService";
+import UserContext from "../UserContext";
 
-export default function FirstConnexionComponent({ nameUser, setNameUser }) {
-  const handleRegister = () => {
-    console.log("enregistrer nom", nameUser);
-  };
+export default function FirstConnexionComponent() {
+  const { userData, setUserData, userDataId } = useContext(UserContext);
 
   const [showToast, setShowToast] = useState(false);
   const [image, setImage] = useState(null);
-  const [age, setAge] = useState();
-  const [description, setDescription] = useState("sdkjfhqsldjfklmqjmsfk");
-  const [isMan, setIsMan] = useState();
-  const [name, setName] = useState("");
-  const [codePostal, setCodePostal] = useState();
-  const [city, setCity] = useState("");
-  const [perimeter, setPerimeter] = useState(0);
+  const [age, setAge] = useState(userData?.age);
+  const [description, setDescription] = useState(userData?.description);
+  const [isMan, setIsMan] = useState(userData?.isMan);
+  const [name, setName] = useState(userData?.name);
+  const [codePostal, setCodePostal] = useState(userData?.codePostal);
+  const [city, setCity] = useState(userData?.city);
+  const [perimeter, setPerimeter] = useState(userData?.perimeter);
   const [photoUrl, setPhotoUrl] = useState("");
-  const [tabHobbies, setTabHobbies] = useState("");
-  const [religion, setReligion] = useState("");
-  const [isReligionRelevant, setIsReligionRelevant] = useState(false);
-  const [agePartnerMin, setAgePartnerMin] = useState(35);
-  const [agePartnerMax, setAgePartnerMax] = useState(35);
-  const [descriptionPartner, setDescriptionPartner] = useState("");
+  const [tabHobbies, setTabHobbies] = useState(userData?.tabHobbies);
+  const [religion, setReligion] = useState(userData?.religion);
+  const [isReligionRelevant, setIsReligionRelevant] = useState(
+    userData?.isReligionRelevant
+  );
 
-  const handleRadioChangeGender = (event) => {
-    setIsMan(event.target.value);
-  };
+  const [tabFormError, setTabFormError] = useState([]);
+
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     const reader = new FileReader();
@@ -50,8 +48,53 @@ export default function FirstConnexionComponent({ nameUser, setNameUser }) {
     }
   };
 
-  const handleSubmit = (e) => {};
+  const handleSubmit = () => {
+    console.log(name, age, codePostal, description, codePostal);
+    let tab = [];
+    //check name
+    if (name.length < 3) {
+      tab = [...tab, "le prénom doit avoir plus de 2 lettres"];
+    }
+    //check age
+    if (age < 18) {
+      tab = [...tab, "Vous devez avoir plus de 18 ans"];
+    }
+    //check codePostal
+    if (codePostal > 98000 || codePostal < 1) {
+      tab = [...tab, "Donnez un code postal valide"];
+    }
+    //check description
+    if (description.length < 10) {
+      tab = [...tab, "Votre texte de description est trop court "];
+    }
+    //check isMan
+    if (typeof isMan !== "boolean") {
+      tab = [...tab, "Vous devez choisir si vous êtes un homme ou une femme "];
+    }
 
+    if (tab.length > 0) {
+      setTabFormError(tab);
+      setShowToast(true);
+    } else {
+      const dataForm = {
+        age,
+        description,
+        isMan,
+        name,
+        codePostal,
+        city,
+        perimeter,
+        tabHobbies,
+        religion,
+        isReligionRelevant,
+      };
+      FirebaseFirestoreService.updateDocument(
+        "userKijimarii",
+        userDataId,
+        dataForm
+      );
+    }
+  };
   return (
     <div className="bg-body-transp jumbotron jumbotron-fluid m-4">
       <div className="container ">
@@ -68,7 +111,7 @@ export default function FirstConnexionComponent({ nameUser, setNameUser }) {
           />
         </Row>
 
-        <Form onSubmit={handleSubmit}>
+        <Form>
           <Row className="justify-content-center align-items-center m-0 p-0">
             <Card
               style={{ width: "18rem" }}
@@ -128,7 +171,7 @@ export default function FirstConnexionComponent({ nameUser, setNameUser }) {
 
           <Form.Group className="bg-dark m-4 p-4 text-white">
             <Form.Check
-              label="Je suis un homme"
+              label="🧔 Je suis un homme"
               name="group1"
               type="radio"
               //value={true}
@@ -137,7 +180,7 @@ export default function FirstConnexionComponent({ nameUser, setNameUser }) {
               checked={isMan === true}
             />
             <Form.Check
-              label="Je suis une femme"
+              label="👩 Je suis une femme"
               name="group1"
               type="radio"
               //value={false}
@@ -189,6 +232,15 @@ export default function FirstConnexionComponent({ nameUser, setNameUser }) {
               }}
               placeholder="Entrer votre ville"
             />
+            <Form.Label>Mon périmètre de rencontre: {perimeter} km</Form.Label>
+            <Form.Range
+              value={perimeter}
+              max={2000}
+              min={0}
+              onChange={(e) => {
+                setPerimeter(e.target.value);
+              }}
+            />
           </Form.Group>
 
           <Form.Group
@@ -206,7 +258,7 @@ export default function FirstConnexionComponent({ nameUser, setNameUser }) {
             />
           </Form.Group>
           <Form.Group className="m-4" controlId="formBasicFirstName">
-            <Form.Label>Centre d'intérêt ou loisirs</Form.Label>
+            <Form.Label>Centre(s) d'intérêt ou loisirs</Form.Label>
             <Form.Control
               type="text"
               value={tabHobbies}
@@ -222,7 +274,12 @@ export default function FirstConnexionComponent({ nameUser, setNameUser }) {
 
           <Form.Group className="m-4" controlId="formBasicFirstName">
             <Form.Label>Religion (facultatif)</Form.Label>
-            <Form.Control type="text" placeholder="Entrer votre religion " />
+            <Form.Control
+              value={religion}
+              onChange={(e) => setReligion(e.target.value)}
+              type="text"
+              placeholder="Entrer votre religion "
+            />
             <Form.Check // prettier-ignore
               type="switch"
               id="custom-switch"
@@ -232,7 +289,7 @@ export default function FirstConnexionComponent({ nameUser, setNameUser }) {
               label={
                 isReligionRelevant
                   ? "Avoir une croyance est important pour moi"
-                  : "Avoir une croyance n'est important pour moi"
+                  : "Avoir une croyance n'est pas important pour moi"
               }
             />
           </Form.Group>
@@ -241,8 +298,7 @@ export default function FirstConnexionComponent({ nameUser, setNameUser }) {
             <Button
               className="w-25"
               onClick={() => {
-                setShowToast(true);
-                handleRegister();
+                handleSubmit();
               }}
             >
               Valider
@@ -257,24 +313,40 @@ export default function FirstConnexionComponent({ nameUser, setNameUser }) {
       >
         <Toast
           className="w-100 text-white"
-          bg="danger"
-          onClose={() => setShowToast(false)}
+          bg={tabFormError.length > 0 ? "danger" : "success"}
+          onClose={() => {
+            console.log("sa ferme");
+            setTabFormError([]);
+            setShowToast(false);
+          }}
           show={showToast}
-          delay={5000}
+          delay={10000}
           autohide
         >
           <Toast.Header closeButton={true}>
-            <img
-              src="holder.js/20x20?text=%20"
-              className="rounded me-2"
-              alt=""
-            />
             <strong className="me-auto">
-              Oops! Il manque des informations
+              {tabFormError.length > 0
+                ? "Oops! Il manque des informations"
+                : "Bienvenue sur Kijimarii"}
             </strong>
           </Toast.Header>
           <Toast.Body>
-            <p>Il manque les informations suivantes:</p>
+            {tabFormError.length > 0 ? (
+              <>
+                <p>Il manque les informations suivantes:</p>
+                <ul className="list-group">
+                  {tabFormError.map((element, index) => (
+                    <li key={index} className="list-group-item">
+                      {element}
+                    </li>
+                  ))}
+                </ul>
+              </>
+            ) : (
+              <>
+                <p>Génial votre compte est créé et actualisé!</p>
+              </>
+            )}
           </Toast.Body>
         </Toast>
       </ToastContainer>
