@@ -15,13 +15,19 @@ import UserContext from "../UserContext";
 import FirebaseFirestoreService from "../FirebaseFirestoreService";
 
 export default function Header() {
-  const { userData, setUserData, userDataId, setUserDataId } =
-    useContext(UserContext);
+  const {
+    userData,
+    setUserData,
+    userDataId,
+    setUserDataId,
+    setPercentageProfilCompleted,
+  } = useContext(UserContext);
   const [popoverMyContacts, setPopoverMyContacts] = useState(false);
   const [popoverMyMails, setPopoverMyMails] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log("naruto");
     if (window.localStorage.getItem("kijimariiUid")) {
       console.log("je suis rentré");
       const queries = [
@@ -36,8 +42,62 @@ export default function Header() {
         queries: queries,
       })
         .then((data) => {
-          setUserData(data.docs[0].data());
+          const dataForm = data.docs[0].data();
+          setUserData(dataForm);
           setUserDataId(data.docs[0].id);
+          let score = 0;
+          console.log("faya bun", dataForm);
+          //check name
+          if (dataForm.name) {
+            if (dataForm.name.length >= 3) {
+              console.log("ichi");
+              score++;
+            }
+          }
+          //check age
+          if (dataForm.age) {
+            if (dataForm?.age >= 18) {
+              console.log("ni");
+              score++;
+            }
+          }
+          //check codePostal
+          if (dataForm.codePostal) {
+            if (dataForm?.codePostal < 98000 && dataForm?.codePostal >= 1) {
+              console.log("san");
+              score++;
+            }
+          }
+          //check description
+          if (dataForm.description) {
+            if (dataForm?.description.length > 10) {
+              console.log("yon");
+              score++;
+            }
+          }
+          //check isMan
+
+          if (typeof dataForm?.isMan === "boolean") {
+            console.log("go");
+            score++;
+          }
+
+          //check descriptionPartner
+          if (dataForm?.descriptionPartner) {
+            if (dataForm?.descriptionPartner.length >= 10) {
+              console.log("roku");
+              score++;
+            }
+          }
+
+          //check human value
+          if (dataForm?.tabHumanValues) {
+            if (dataForm?.tabHumanValues.length >= 5) {
+              console.log("nana");
+              score++;
+            }
+          }
+          setPercentageProfilCompleted((score * 100) / 7);
         })
         .catch((error) => {
           console.log(error);

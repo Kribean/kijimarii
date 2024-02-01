@@ -1,7 +1,10 @@
 import { Button, Col, ProgressBar, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
-export default function ProfileCompletedComponent() {
+export default function ProfileCompletedComponent({
+  percentageProfilCompleted,
+}) {
+  console.log("fuuton", percentageProfilCompleted);
   const navigate = useNavigate();
   const handleGoToProfile = () => {
     navigate("/profil");
@@ -14,7 +17,12 @@ export default function ProfileCompletedComponent() {
       <p className="lead"> Profil non créé</p>
       <Row className="justify-content-center align-items-center">
         <Col xs={6}>
-          <ProgressBar variant="warning" animated now={10} label={10} />
+          <ProgressBar
+            variant={percentageProfilCompleted < 100 ? "warning" : "succeed"}
+            animated
+            now={percentageProfilCompleted}
+            label={Math.round(percentageProfilCompleted)}
+          />
         </Col>
         <Col xs={6}>
           <Button

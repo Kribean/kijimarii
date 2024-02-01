@@ -18,11 +18,19 @@ import { useState } from "react";
 function App() {
   const [userData, setUserData] = useState(null);
   const [userDataId, setUserDataId] = useState(null);
+  const [percentageProfilCompleted, setPercentageProfilCompleted] = useState(0);
 
   return (
     <Container className="w-100 m-0 p-0" fluid>
       <UserContext.Provider
-        value={{ userData, setUserData, userDataId, setUserDataId }}
+        value={{
+          userData,
+          setUserData,
+          userDataId,
+          setUserDataId,
+          percentageProfilCompleted,
+          setPercentageProfilCompleted,
+        }}
       >
         <Routes>
           <Route path="/" element={<HomePage />}></Route>

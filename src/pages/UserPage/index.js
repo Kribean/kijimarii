@@ -11,7 +11,8 @@ export default function UserPage() {
   // eslint-disable-next-line no-unused-vars
   const [showFirstConnexion, setShowFirstConnexion] = useState(true);
 
-  const { userData, setUserData } = useContext(UserContext);
+  const { userData, setUserData, percentageProfilCompleted } =
+    useContext(UserContext);
 
   return (
     <Container fluid>
@@ -32,7 +33,9 @@ export default function UserPage() {
               />
             </Form>
           </Row>
-          <ProfileCompletedComponent />
+          <ProfileCompletedComponent
+            percentageProfilCompleted={percentageProfilCompleted}
+          />
 
           <Card>
             <Card.Header>Partage de votre profil</Card.Header>

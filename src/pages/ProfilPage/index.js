@@ -18,10 +18,10 @@ import { useNavigate } from "react-router-dom";
 import Header from "../../components/Header";
 
 export default function ProfilPage() {
-  const now = 60;
   const navigate = useNavigate();
 
-  const { userData, setUserData, userDataId } = useContext(UserContext);
+  const { userData, setUserData, userDataId, percentageProfilCompleted } =
+    useContext(UserContext);
 
   const [showToast, setShowToast] = useState(false);
   const [image, setImage] = useState(null);
@@ -120,6 +120,7 @@ export default function ProfilPage() {
         agePartnerMin,
         agePartnerMax,
         tabHumanValues,
+        descriptionPartner,
       };
       FirebaseFirestoreService.updateDocument(
         "userKijimarii",
@@ -140,7 +141,12 @@ export default function ProfilPage() {
         <Header />
         <Row className="m-4 text-center">
           <p className="lead p-0 m-0"> Ton proil doit être complété à 100%</p>
-          <ProgressBar now={now} label={`${now}%`} />
+          <ProgressBar
+            variant={percentageProfilCompleted < 100 ? "warning" : "succeed"}
+            animated
+            now={percentageProfilCompleted}
+            label={Math.round(percentageProfilCompleted)}
+          />
         </Row>
         <Form>
           <Row className="justify-content-center align-items-center m-0 p-0">
