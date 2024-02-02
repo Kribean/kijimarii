@@ -11,8 +11,11 @@ import { useState } from "react";
 import UserCardComponent from "../../components/UserCardComponent";
 import HeaderFriend from "../../components/HeaderFriend";
 import FinishComponent from "../../components/FinishComponent";
+import { useParams } from "react-router-dom";
 
 export default function ShareFriendToFriendPage() {
+  const { uid } = useParams();
+  console.log(uid, "jhhhh");
   const [show, setShow] = useState(false);
   // eslint-disable-next-line no-unused-vars
   const [nameOfResearcher, setNameOfResearcher] = useState(" Emmanuel ");

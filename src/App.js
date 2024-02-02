@@ -48,10 +48,13 @@ function App() {
             element={<ShareUserToFriendPage />}
           ></Route>
           <Route
-            path="/friends-network"
+            path="/friends-network/:uid"
             element={<ShareFriendToFriendPage />}
           ></Route>
-          <Route path="/interested" element={<ShareToKindredPage />}></Route>
+          <Route
+            path="/interested/:uid"
+            element={<ShareToKindredPage />}
+          ></Route>
         </Routes>
       </UserContext.Provider>
     </Container>
