@@ -1,34 +1,64 @@
 import { Badge, Card, Container, Form, Row } from "react-bootstrap";
 import Header from "../../components/Header";
 import ProfileCompletedComponent from "../../components/ProfileCompletedComponent";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import FirstConnexionComponent from "../../components/FirstConnexionComponent";
 import HeaderNoName from "../../components/HeaderNoName";
 
 import UserContext from "../../UserContext";
+import FirebaseFirestoreService from "../../FirebaseFirestoreService";
 
 export default function UserPage() {
-  // eslint-disable-next-line no-unused-vars
-  const [showFirstConnexion, setShowFirstConnexion] = useState(true);
+  const { userData, userDataId, percentageProfilCompleted } =
+    useContext(UserContext);
+  const [experienceIsActive, setExperienceIsActive] = useState();
 
-  const { userData, percentageProfilCompleted } = useContext(UserContext);
-
+  const handleChangeStatusIsSession = () => {
+    const dataForm = {
+      isSessionActive: !userData?.isSessionActive,
+    };
+    FirebaseFirestoreService.updateDocument(
+      "userKijimarii",
+      userDataId,
+      dataForm
+    )
+      .then(() => {
+        console.log("aquiiiiii");
+        setExperienceIsActive(!userData.isSessionActive);
+      })
+      .catch((error) => {
+        console.log(
+          "update isSession:",
+          error,
+          "userData?.isSessionActive: ",
+          userData?.isSessionActive
+        );
+      });
+  };
+  useEffect(() => {
+    setExperienceIsActive(userData?.isSessionActive);
+  }, []);
   return (
     <Container fluid>
       {userData?.name ? (
         <>
-          <Header isNameExisted={true} />
+          <Header />
           <Row className="justify-content-center">
             <h1 className="display-4">Tableau de bord</h1>
           </Row>
           <p className="lead">Bienvenue {userData.name} 😀</p>
           <Row className="align-self-center">
+            {experienceIsActive + " :valeur bool: " + userData?.isSessionActive}
             <Form className="justify-content-center">
               <Form.Check // prettier-ignore
                 type="switch"
                 id="custom-switch"
                 label="Activé l'expérience"
                 className="fs-4 mr-4"
+                value={experienceIsActive}
+                onChange={() => {
+                  handleChangeStatusIsSession();
+                }}
               />
             </Form>
           </Row>

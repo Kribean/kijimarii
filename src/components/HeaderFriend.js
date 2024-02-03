@@ -14,7 +14,6 @@ export default function HeaderFriend() {
   };
   useEffect(() => {
     if (uid) {
-      console.log("je suis rentré");
       const queries = [
         {
           field: "uidAuthor",

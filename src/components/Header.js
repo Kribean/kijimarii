@@ -15,16 +15,20 @@ import UserContext from "../UserContext";
 import FirebaseFirestoreService from "../FirebaseFirestoreService";
 
 export default function Header() {
-  const { userData, setUserData, setUserDataId, setPercentageProfilCompleted } =
-    useContext(UserContext);
+  const {
+    userData,
+    setUserData,
+    setUserDataId,
+    userDataId,
+    setPercentageProfilCompleted,
+  } = useContext(UserContext);
   const [popoverMyContacts, setPopoverMyContacts] = useState(false);
   const [popoverMyMails, setPopoverMyMails] = useState(false);
+  const [helpIsActive, setHelpIsActive] = useState();
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log("naruto");
     if (window.localStorage.getItem("kijimariiUid")) {
-      console.log("je suis rentré");
       const queries = [
         {
           field: "uidAuthor",
@@ -41,46 +45,40 @@ export default function Header() {
           setUserData(dataForm);
           setUserDataId(data.docs[0].id);
           let score = 0;
-          console.log("faya bun", dataForm);
+
           //check name
           if (dataForm.name) {
             if (dataForm.name.length >= 3) {
-              console.log("ichi");
               score++;
             }
           }
           //check age
           if (dataForm.age) {
             if (dataForm?.age >= 18) {
-              console.log("ni");
               score++;
             }
           }
           //check codePostal
           if (dataForm.codePostal) {
             if (dataForm?.codePostal < 98000 && dataForm?.codePostal >= 1) {
-              console.log("san");
               score++;
             }
           }
           //check description
           if (dataForm.description) {
             if (dataForm?.description.length > 10) {
-              console.log("yon");
               score++;
             }
           }
           //check isMan
 
           if (typeof dataForm?.isMan === "boolean") {
-            console.log("go");
             score++;
           }
 
           //check descriptionPartner
           if (dataForm?.descriptionPartner) {
             if (dataForm?.descriptionPartner.length >= 10) {
-              console.log("roku");
               score++;
             }
           }
@@ -88,7 +86,6 @@ export default function Header() {
           //check human value
           if (dataForm?.tabHumanValues) {
             if (dataForm?.tabHumanValues.length >= 5) {
-              console.log("nana");
               score++;
             }
           }
@@ -103,6 +100,8 @@ export default function Header() {
       setPopoverMyMails(true);
       setPopoverMyContacts(true);
     }, 500);
+
+    setHelpIsActive(userData?.showFirstConnexion);
   }, []);
 
   const handleGoToListContact = () => {
@@ -125,6 +124,24 @@ export default function Header() {
         console.log(error);
       });
   }
+
+  const handleChangeStatusFirstConnexion = () => {
+    const dataForm = {
+      showFirstConnexion: false,
+    };
+    FirebaseFirestoreService.updateDocument(
+      "userKijimarii",
+      userDataId,
+      dataForm
+    )
+      .then(() => {
+        console.log("pannel d'aide plus visible");
+        setHelpIsActive(false);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
     <>
@@ -149,7 +166,7 @@ export default function Header() {
             <Col md={8} xs={12}>
               <OverlayTrigger
                 show={popoverMyContacts}
-                defaultShow={true}
+                defaultShow={helpIsActive}
                 trigger={["hover", "click"]}
                 delay={0}
                 placement="bottom"
@@ -184,7 +201,7 @@ export default function Header() {
           <OverlayTrigger
             show={popoverMyMails}
             trigger={["hover", "click"]}
-            defaultShow={true}
+            defaultShow={helpIsActive}
             placement="auto-start"
             delay={0}
             overlay={

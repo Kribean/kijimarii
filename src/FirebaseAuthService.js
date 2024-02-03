@@ -10,7 +10,6 @@ const loginWithGoogle = () => {
 const subscribeToAuthChanges = (handleAuthChange) => {
   auth.onAuthStateChanged((user) => {
     handleAuthChange(user);
-    console.log("man rivé: ", user);
   });
 };
 

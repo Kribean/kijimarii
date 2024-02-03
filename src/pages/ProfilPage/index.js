@@ -62,7 +62,6 @@ export default function ProfilPage() {
   };
 
   const handleSubmit = () => {
-    console.log(name, age, codePostal, description, codePostal);
     let tab = [];
     //check name
     if (name.length < 3) {

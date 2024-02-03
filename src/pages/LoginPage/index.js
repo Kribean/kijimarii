@@ -53,6 +53,7 @@ export default function LoginPage() {
             agePartnerMax: 35,
             tabHumanValues: "",
             descriptionPartner: "",
+            showFirstConnexion: true,
           })
             .then(() => {
               handleNavigation();
