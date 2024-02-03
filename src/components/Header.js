@@ -15,13 +15,8 @@ import UserContext from "../UserContext";
 import FirebaseFirestoreService from "../FirebaseFirestoreService";
 
 export default function Header() {
-  const {
-    userData,
-    setUserData,
-    userDataId,
-    setUserDataId,
-    setPercentageProfilCompleted,
-  } = useContext(UserContext);
+  const { userData, setUserData, setUserDataId, setPercentageProfilCompleted } =
+    useContext(UserContext);
   const [popoverMyContacts, setPopoverMyContacts] = useState(false);
   const [popoverMyMails, setPopoverMyMails] = useState(false);
   const navigate = useNavigate();

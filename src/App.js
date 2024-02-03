@@ -18,6 +18,7 @@ import { useState } from "react";
 function App() {
   const [userData, setUserData] = useState(null);
   const [userDataId, setUserDataId] = useState(null);
+  const [emitterData, setEmitterData] = useState(null);
   const [percentageProfilCompleted, setPercentageProfilCompleted] = useState(0);
 
   return (
@@ -30,6 +31,8 @@ function App() {
           setUserDataId,
           percentageProfilCompleted,
           setPercentageProfilCompleted,
+          emitterData,
+          setEmitterData,
         }}
       >
         <Routes>

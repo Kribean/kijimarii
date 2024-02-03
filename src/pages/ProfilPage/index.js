@@ -1,6 +1,5 @@
 import {
   Button,
-  Image,
   FloatingLabel,
   Form,
   Row,
@@ -20,7 +19,7 @@ import Header from "../../components/Header";
 export default function ProfilPage() {
   const navigate = useNavigate();
 
-  const { userData, setUserData, userDataId, percentageProfilCompleted } =
+  const { userData, userDataId, percentageProfilCompleted } =
     useContext(UserContext);
 
   const [showToast, setShowToast] = useState(false);

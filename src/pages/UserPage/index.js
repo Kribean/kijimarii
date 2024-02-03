@@ -1,18 +1,17 @@
 import { Badge, Card, Container, Form, Row } from "react-bootstrap";
 import Header from "../../components/Header";
 import ProfileCompletedComponent from "../../components/ProfileCompletedComponent";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import FirstConnexionComponent from "../../components/FirstConnexionComponent";
 import HeaderNoName from "../../components/HeaderNoName";
-import FirebaseFirestoreService from "../../FirebaseFirestoreService";
+
 import UserContext from "../../UserContext";
 
 export default function UserPage() {
   // eslint-disable-next-line no-unused-vars
   const [showFirstConnexion, setShowFirstConnexion] = useState(true);
 
-  const { userData, setUserData, percentageProfilCompleted } =
-    useContext(UserContext);
+  const { userData, percentageProfilCompleted } = useContext(UserContext);
 
   return (
     <Container fluid>
