@@ -1,4 +1,4 @@
-import { Badge, Card, Container, Form, Row } from "react-bootstrap";
+import { Badge, Button, Card, Container, Form, Row } from "react-bootstrap";
 import Header from "../../components/Header";
 import ProfileCompletedComponent from "../../components/ProfileCompletedComponent";
 import { useContext, useEffect, useState } from "react";
@@ -7,15 +7,17 @@ import HeaderNoName from "../../components/HeaderNoName";
 
 import UserContext from "../../UserContext";
 import FirebaseFirestoreService from "../../FirebaseFirestoreService";
+import { useNavigate } from "react-router-dom";
 
 export default function UserPage() {
+  const navigate = useNavigate();
   const { userData, userDataId, percentageProfilCompleted } =
     useContext(UserContext);
-  const [experienceIsActive, setExperienceIsActive] = useState();
 
   const handleChangeStatusIsSession = () => {
+    console.log("dooooooooooooo");
     const dataForm = {
-      isSessionActive: !userData?.isSessionActive,
+      isSessionActive: !userData.isSessionActive,
     };
     FirebaseFirestoreService.updateDocument(
       "userKijimarii",
@@ -24,20 +26,12 @@ export default function UserPage() {
     )
       .then(() => {
         console.log("aquiiiiii");
-        setExperienceIsActive(!userData.isSessionActive);
+        navigate("/experience-status");
       })
       .catch((error) => {
-        console.log(
-          "update isSession:",
-          error,
-          "userData?.isSessionActive: ",
-          userData?.isSessionActive
-        );
+        console.log("update isSession:", error);
       });
   };
-  useEffect(() => {
-    setExperienceIsActive(userData?.isSessionActive);
-  }, []);
   return (
     <Container fluid>
       {userData?.name ? (
@@ -47,20 +41,18 @@ export default function UserPage() {
             <h1 className="display-4">Tableau de bord</h1>
           </Row>
           <p className="lead">Bienvenue {userData.name} 😀</p>
-          <Row className="align-self-center">
-            {experienceIsActive + " :valeur bool: " + userData?.isSessionActive}
-            <Form className="justify-content-center">
-              <Form.Check // prettier-ignore
-                type="switch"
-                id="custom-switch"
-                label="Activé l'expérience"
-                className="fs-4 mr-4"
-                value={experienceIsActive}
-                onChange={() => {
-                  handleChangeStatusIsSession();
-                }}
-              />
-            </Form>
+          <Row className="align-self-center justify-content-center">
+            <Button
+              className="w-75"
+              variant={userData.isSessionActive ? "success" : "danger"}
+              onClick={() => {
+                handleChangeStatusIsSession();
+              }}
+            >
+              {userData?.isSessionActive
+                ? "Expérience activée - Cliquer pour désactiver votre profil"
+                : "Expérience désactivée - Cliquer pour activer votre profil"}
+            </Button>
           </Row>
           <ProfileCompletedComponent
             percentageProfilCompleted={percentageProfilCompleted}

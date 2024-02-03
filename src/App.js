@@ -14,6 +14,7 @@ import UserContext from "./UserContext";
 // eslint-disable-next-line no-unused-vars
 import firebase from "./FirebaseConfig.js";
 import { useState } from "react";
+import ExperienceStatusPage from "./pages/ExperienceStatusPage/index.js";
 
 function App() {
   const [userData, setUserData] = useState(null);
@@ -45,6 +46,10 @@ function App() {
           <Route
             path="/user-send-request"
             element={<CreateProfilSuccessPage />}
+          ></Route>
+          <Route
+            path="/experience-status"
+            element={<ExperienceStatusPage />}
           ></Route>
           <Route
             path="/send-to-my-friends"
