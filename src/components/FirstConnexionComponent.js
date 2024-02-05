@@ -13,6 +13,7 @@ import bookPng from "../assets/book.jpg";
 import { useState, useContext } from "react";
 import FirebaseFirestoreService from "../FirebaseFirestoreService";
 import UserContext from "../UserContext";
+import ImageUploadPreview from "./ImageUploadPreview";
 
 export default function FirstConnexionComponent() {
   const { userData, setUserData, userDataId } = useContext(UserContext);
@@ -26,7 +27,7 @@ export default function FirstConnexionComponent() {
   const [codePostal, setCodePostal] = useState(userData?.codePostal);
   const [city, setCity] = useState(userData?.city);
   const [perimeter, setPerimeter] = useState(userData?.perimeter);
-  const [photoUrl, setPhotoUrl] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
   const [tabHobbies, setTabHobbies] = useState(userData?.tabHobbies);
   const [religion, setReligion] = useState(userData?.religion);
   const [isReligionRelevant, setIsReligionRelevant] = useState(
@@ -34,19 +35,6 @@ export default function FirstConnexionComponent() {
   );
 
   const [tabFormError, setTabFormError] = useState([]);
-
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    const reader = new FileReader();
-
-    reader.onloadend = () => {
-      setImage(reader.result);
-    };
-
-    if (file) {
-      reader.readAsDataURL(file);
-    }
-  };
 
   const handleSubmit = () => {
     console.log(name, age, codePostal, description, codePostal);
@@ -62,6 +50,10 @@ export default function FirstConnexionComponent() {
     //check codePostal
     if (codePostal > 98000 || codePostal < 1) {
       tab = [...tab, "Donnez un code postal valide"];
+    }
+    //check image
+    if (!imageUrl) {
+      tab = [...tab, "Il nous faudrait une photo"];
     }
     //check description
     if (description.length < 10) {
@@ -87,6 +79,7 @@ export default function FirstConnexionComponent() {
         tabHobbies,
         religion,
         isReligionRelevant,
+        imageUrl,
       };
       FirebaseFirestoreService.updateDocument(
         "userKijimarii",
@@ -112,29 +105,15 @@ export default function FirstConnexionComponent() {
         </Row>
 
         <Form>
-          <Row className="justify-content-center align-items-center m-0 p-0">
-            <Card
-              style={{ width: "18rem" }}
-              className=" m-4 justify-content-center align-items-center"
-            >
-              {image && (
-                <Card.Img style={{ width: "50%" }} width={24} src={image} />
-              )}
-              <Card.Body>
-                <Card.Title>Ajouter une photo </Card.Title>
-                <Form.Group className="btn btn-primary" controlId="formFile">
-                  <Form.Label> cliquer pour ajouter une image</Form.Label>
-                  <Form.Control
-                    className="btn btn-primary"
-                    type="file"
-                    accept=".jpg,.gif,.png"
-                    multiple
-                    onChange={handleImageChange}
-                  />
-                </Form.Group>
-              </Card.Body>
-            </Card>
-          </Row>
+          <div className="image-input-box">
+            Recipe Image
+            <ImageUploadPreview
+              basePath="userKijimarii"
+              existingImageUrl={imageUrl}
+              handleUploadFinish={(downloadUrl) => setImageUrl(downloadUrl)}
+              handleUploadCancel={() => setImageUrl("")}
+            />
+          </div>
 
           <Form.Group className="m-4" controlId="formBasicFirstName">
             <FloatingLabel

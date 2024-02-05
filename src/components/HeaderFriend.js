@@ -6,7 +6,7 @@ import FirebaseFirestoreService from "../FirebaseFirestoreService";
 import UserContext from "../UserContext";
 
 export default function HeaderFriend() {
-  const { setEmitterData } = useContext(UserContext);
+  const { setEmitterData, setEmitterDataId } = useContext(UserContext);
   const navigate = useNavigate();
   const { uid } = useParams();
   const handleGoToDashboard = () => {
@@ -28,6 +28,7 @@ export default function HeaderFriend() {
         .then((data) => {
           const dataForm = data.docs[0].data();
           setEmitterData(dataForm);
+          setEmitterDataId(data.docs[0].id);
         })
         .catch((error) => {
           console.log(error);

@@ -18,9 +18,11 @@ import FinishComponent from "../../components/FinishComponent";
 import { useContext } from "react";
 import UserContext from "../../UserContext";
 import FirebaseAuthService from "../../FirebaseAuthService";
+import FirebaseFirestoreService from "../../FirebaseFirestoreService";
 
 export default function ShareToKindredPage() {
-  const { emitterData, setUserData } = useContext(UserContext);
+  const { emitterData, setUserData, emitterDataId } = useContext(UserContext);
+  console.log("emitterData: ", emitterData);
   const navigate = useNavigate();
   const handleNavigation = () => {
     navigate("/home-user/?uuid=5646-e");
@@ -29,11 +31,70 @@ export default function ShareToKindredPage() {
   const [modalShow, setModalShow] = useState(false);
   const [nextPage, setNextPage] = useState(false);
 
+  const recordInterestInUser = (response) => {
+    if (!emitterData?.tabInterested.includes(response?.user.uid)) {
+      FirebaseFirestoreService.updateDocument("userKijimarii", emitterDataId, {
+        tabInterested: [...emitterData.tabInterested, response?.user.uid],
+      });
+    }
+  };
+
+  const createInterestedDoc = (response, responseUser) => {
+    if (responseUser?.docs.length === 0) {
+      FirebaseFirestoreService.createDocument("userKijimarii", {
+        uidAuthor: response?.user.uid,
+        email: response?.user.email,
+        age: null,
+        description: "",
+        isMan: null,
+        name: "",
+        codePostal: null,
+        city: "",
+        perimeter: 0,
+        isSessionActive: true,
+        photoUrl: null,
+        tabHobbies: "",
+        religion: "",
+        isReligionRelevant: false,
+        agePartnerMin: 35,
+        agePartnerMax: 35,
+        tabHumanValues: "",
+        descriptionPartner: "",
+        showFirstConnexion: true,
+        tabInterested: ["", emitterData.uidAuthor],
+      });
+    }
+  };
+
   async function handleLoginWithGoogle() {
     try {
       const response = await FirebaseAuthService.loginWithGoogle();
+
+      const queries = [
+        {
+          field: "uidAuthor",
+          condition: "==",
+          value: response?.user.uid,
+        },
+      ];
+
       if (response?.user) {
-        handleNavigation();
+        const responseUser = await FirebaseFirestoreService.readDocuments({
+          collection: "userKijimarii",
+          queries: queries,
+        });
+
+        //mettre ici les promise
+        Promise.all([
+          recordInterestInUser(response),
+          createInterestedDoc(response, responseUser),
+        ])
+          .then(() => {
+            handleNavigation();
+          })
+          .catch((error) => {
+            console.log(error);
+          });
       }
     } catch (error) {
       alert(error.message);

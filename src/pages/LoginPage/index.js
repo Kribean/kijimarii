@@ -54,6 +54,7 @@ export default function LoginPage() {
             tabHumanValues: "",
             descriptionPartner: "",
             showFirstConnexion: true,
+            tabInterested: [],
           })
             .then(() => {
               handleNavigation();
