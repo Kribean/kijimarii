@@ -128,7 +128,6 @@ export default function LoginPage() {
                 className="m-4"
                 size="md"
                 onClick={() => {
-                  console.log("fuuton");
                   handleLoginWithGoogle();
                   //handleNavigation();
                 }}

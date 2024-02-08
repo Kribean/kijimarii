@@ -19,7 +19,6 @@ export default function FirstConnexionComponent() {
   const { userData, setUserData, userDataId } = useContext(UserContext);
 
   const [showToast, setShowToast] = useState(false);
-  const [image, setImage] = useState(null);
   const [age, setAge] = useState(userData?.age);
   const [description, setDescription] = useState(userData?.description);
   const [isMan, setIsMan] = useState(userData?.isMan);

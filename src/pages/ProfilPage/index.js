@@ -10,11 +10,12 @@ import {
   ProgressBar,
   Col,
 } from "react-bootstrap";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import FirebaseFirestoreService from "../../FirebaseFirestoreService";
 import UserContext from "../../UserContext";
 import { useNavigate } from "react-router-dom";
 import Header from "../../components/Header";
+import ImageUploadPreview from "../../components/ImageUploadPreview";
 
 export default function ProfilPage() {
   const navigate = useNavigate();
@@ -27,11 +28,11 @@ export default function ProfilPage() {
   const [age, setAge] = useState(userData?.age);
   const [description, setDescription] = useState(userData?.description);
   const [isMan, setIsMan] = useState(userData?.isMan);
-  const [name, setName] = useState(userData?.name);
+  const [name, setName] = useState("");
   const [codePostal, setCodePostal] = useState(userData?.codePostal);
   const [city, setCity] = useState(userData?.city);
   const [perimeter, setPerimeter] = useState(userData?.perimeter);
-  const [photoUrl, setPhotoUrl] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
   const [tabHobbies, setTabHobbies] = useState(userData?.tabHobbies);
   const [religion, setReligion] = useState(userData?.religion);
   const [isReligionRelevant, setIsReligionRelevant] = useState(
@@ -83,7 +84,10 @@ export default function ProfilPage() {
     if (typeof isMan !== "boolean") {
       tab = [...tab, "Vous devez choisir si vous êtes un homme ou une femme "];
     }
-
+    //check image
+    if (!imageUrl) {
+      tab = [...tab, "Il nous faudrait une photo"];
+    }
     //check descriptionPartner
     if (descriptionPartner.length < 10) {
       tab = [
@@ -119,6 +123,7 @@ export default function ProfilPage() {
         agePartnerMax,
         tabHumanValues,
         descriptionPartner,
+        imageUrl,
       };
       FirebaseFirestoreService.updateDocument(
         "userKijimarii",
@@ -133,6 +138,26 @@ export default function ProfilPage() {
         });
     }
   };
+
+  useEffect(() => {
+    if (userData) {
+      setAge(userData?.age);
+      setDescription(userData?.description);
+      setIsMan(userData?.isMan);
+      setName(userData?.name);
+      setCodePostal(userData?.codePostal);
+      setCity(userData?.city);
+      setPerimeter(userData?.perimeter);
+      setImageUrl(userData?.imageUrl);
+      setTabHobbies(userData?.tabHobbies);
+      setReligion(userData?.religion);
+      setIsReligionRelevant(userData?.isReligionRelevant);
+      setAgePartnerMin(userData?.agePartnerMin);
+      setAgePartnerMax(userData?.agePartnerMax);
+      setTabHumanValues(userData?.tabHumanValues);
+      setDescriptionPartner(userData?.descriptionPartner);
+    }
+  }, [userData]);
   return (
     <div className="bg-body-transp jumbotron jumbotron-fluid m-4">
       <div className="container ">
@@ -148,31 +173,18 @@ export default function ProfilPage() {
         </Row>
         <Form>
           <Row className="justify-content-center align-items-center m-0 p-0">
-            <Card
-              style={{ width: "18rem" }}
-              className=" m-4 justify-content-center align-items-center"
-            >
-              <Card.Img
-                style={{ width: "50%" }}
-                width={24}
-                src={"addFilePng"}
+            <div className="image-input-box">
+              Recipe Image
+              <ImageUploadPreview
+                basePath="userKijimarii"
+                existingImageUrl={imageUrl}
+                handleUploadFinish={(downloadUrl) => setImageUrl(downloadUrl)}
+                handleUploadCancel={() => setImageUrl("")}
               />
-              <Card.Body>
-                <Card.Title>Ajouter une photo </Card.Title>
-                <Form.Group className="btn btn-primary" controlId="formFile">
-                  <Form.Label> cliquer pour ajouter une image</Form.Label>
-                  <Form.Control
-                    className="btn btn-primary"
-                    type="file"
-                    accept=".jpg,.gif,.png"
-                    multiple
-                  />
-                </Form.Group>
-              </Card.Body>
-            </Card>
+            </div>
           </Row>
 
-          <Row className="justify-content-center align-items-center m-0 p-0">
+          {/**           <Row className="justify-content-center align-items-center m-0 p-0">
             <Card
               style={{ width: "18rem" }}
               className=" m-4 justify-content-center align-items-center"
@@ -194,7 +206,7 @@ export default function ProfilPage() {
                 </Form.Group>
               </Card.Body>
             </Card>
-          </Row>
+              </Row>**/}
 
           <Form.Group className="m-4" controlId="formBasicFirstName">
             <FloatingLabel

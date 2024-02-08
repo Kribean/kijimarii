@@ -1,8 +1,7 @@
 import { Button, Card, Row, Col, Image, Container } from "react-bootstrap";
-import HallyBerryJpg from "../assets/Halle-Berry.jpg";
 import { useNavigate } from "react-router-dom";
 
-export default function KindredCardComponent() {
+export default function KindredCardComponent(props) {
   const navigate = useNavigate();
   const handleGoToChat = () => {
     navigate("/messanger");
@@ -15,15 +14,35 @@ export default function KindredCardComponent() {
             <Image
               width={"200px"}
               alt="photo de profil"
-              src={HallyBerryJpg}
+              src={props.data?.imageUrl}
               fluid
             />
           </Col>
           <Col md={8} xs={12}>
             <Card.Body>
-              <Card.Title>Card Title</Card.Title>
-              <Card.Text>Description: sdflkjlsjvk lsqdjflkj</Card.Text>
-              <Card.Text>Email: sdflkjlsjvk lsqdjflkj</Card.Text>
+              <Card.Title>Prénom: {props.data?.name}</Card.Title>
+              <Card.Title>Email: {props.data?.email}</Card.Title>
+              <Card.Text>Age: {props.data?.age}</Card.Text>
+              <Card.Text>Description: {props.data?.description}</Card.Text>
+              {props.data?.religion?.length > 2 && (
+                <Card.Text>Religion: {props.data?.religion}</Card.Text>
+              )}
+              <Card.Title>A propos de sa recherche</Card.Title>
+              <Card.Text>
+                Description: {props.data?.descriptionPartner}
+              </Card.Text>
+              <Card.Text>
+                Valeurs humaine: {props.data?.tabHumanValues}
+              </Card.Text>
+              <Card.Text>Age minimum: {props.data?.agePartnerMin}</Card.Text>
+              <Card.Text>Age maximum: {props.data?.agePartnerMax}</Card.Text>
+              <Card.Text>
+                Localisation: {props.data?.city} ({props.data?.codePostal}) et
+                dans un périmètre de {props.data?.perimeter} km
+              </Card.Text>
+              {props.data?.isReligionRelevant && (
+                <Card.Text>Religion: {props.data?.religion}</Card.Text>
+              )}
               <Button
                 variant="primary"
                 onClick={() => {
