@@ -25,9 +25,39 @@ export default function MessagePage() {
   const getAllMessages = () => {
     if (chatUser?.uidAuthor && userData?.uidAuthor) {
       const queries = {
-        field: "autor",
-        condition: "==",
-        value: "2",
+        operator: "OR",
+        conditions: [
+          {
+            operator: "AND",
+            conditions: [
+              {
+                field: "autor",
+                condition: "==",
+                value: userData?.uidAuthor,
+              },
+              {
+                field: "receiver",
+                condition: "==",
+                value: chatUser?.uidAuthor,
+              },
+            ],
+          },
+          {
+            operator: "AND",
+            conditions: [
+              {
+                field: "autor",
+                condition: "==",
+                value: chatUser?.uidAuthor,
+              },
+              {
+                field: "receiver",
+                condition: "==",
+                value: userData?.uidAuthor,
+              },
+            ],
+          },
+        ],
       };
       FirebaseFirestoreService.readDocuments({
         collection: "messageKijimarii",
