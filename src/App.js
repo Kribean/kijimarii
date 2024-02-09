@@ -18,6 +18,7 @@ import ExperienceStatusPage from "./pages/ExperienceStatusPage/index.js";
 
 function App() {
   const [userData, setUserData] = useState(null);
+  const [chatUser, setChatUser] = useState(null);
   const [userDataId, setUserDataId] = useState(null);
   const [emitterDataId, setEmitterDataId] = useState(null);
   const [emitterData, setEmitterData] = useState(null);
@@ -37,6 +38,8 @@ function App() {
           setEmitterData,
           emitterDataId,
           setEmitterDataId,
+          chatUser,
+          setChatUser,
         }}
       >
         <Routes>

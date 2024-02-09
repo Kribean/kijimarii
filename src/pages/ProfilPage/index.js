@@ -24,7 +24,6 @@ export default function ProfilPage() {
     useContext(UserContext);
 
   const [showToast, setShowToast] = useState(false);
-  const [image, setImage] = useState(null);
   const [age, setAge] = useState(userData?.age);
   const [description, setDescription] = useState(userData?.description);
   const [isMan, setIsMan] = useState(userData?.isMan);
@@ -48,19 +47,6 @@ export default function ProfilPage() {
   );
 
   const [tabFormError, setTabFormError] = useState([]);
-
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    const reader = new FileReader();
-
-    reader.onloadend = () => {
-      setImage(reader.result);
-    };
-
-    if (file) {
-      reader.readAsDataURL(file);
-    }
-  };
 
   const handleSubmit = () => {
     let tab = [];
@@ -183,30 +169,6 @@ export default function ProfilPage() {
               />
             </div>
           </Row>
-
-          {/**           <Row className="justify-content-center align-items-center m-0 p-0">
-            <Card
-              style={{ width: "18rem" }}
-              className=" m-4 justify-content-center align-items-center"
-            >
-              {image && (
-                <Card.Img style={{ width: "50%" }} width={24} src={image} />
-              )}
-              <Card.Body>
-                <Card.Title>Ajouter une photo </Card.Title>
-                <Form.Group className="btn btn-primary" controlId="formFile">
-                  <Form.Label> cliquer pour ajouter une image</Form.Label>
-                  <Form.Control
-                    className="btn btn-primary"
-                    type="file"
-                    accept=".jpg,.gif,.png"
-                    multiple
-                    onChange={handleImageChange}
-                  />
-                </Form.Group>
-              </Card.Body>
-            </Card>
-              </Row>**/}
 
           <Form.Group className="m-4" controlId="formBasicFirstName">
             <FloatingLabel

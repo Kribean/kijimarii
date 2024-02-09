@@ -1,10 +1,16 @@
 import { Button, Card, Row, Col, Image, Container } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import UserContext from "../UserContext";
+import { useContext } from "react";
 
 export default function KindredCardComponent(props) {
+  const { setChatUser } = useContext(UserContext);
   const navigate = useNavigate();
   const handleGoToChat = () => {
-    navigate("/messanger");
+    if (props.data) {
+      setChatUser(props.data);
+      navigate(`/messanger`);
+    }
   };
   return (
     <Container className="px-4" fluid>
@@ -37,8 +43,9 @@ export default function KindredCardComponent(props) {
               <Card.Text>Age minimum: {props.data?.agePartnerMin}</Card.Text>
               <Card.Text>Age maximum: {props.data?.agePartnerMax}</Card.Text>
               <Card.Text>
-                Localisation: {props.data?.city} ({props.data?.codePostal}) et
-                dans un périmètre de {props.data?.perimeter} km
+                Localisation: {props.data?.city}{" "}
+                {"(" + props.data?.codePostal + ")"} et dans un périmètre de{" "}
+                {props.data?.perimeter} km
               </Card.Text>
               {props.data?.isReligionRelevant && (
                 <Card.Text>Religion: {props.data?.religion}</Card.Text>

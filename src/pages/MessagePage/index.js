@@ -3,10 +3,51 @@ import InputGroup from "react-bootstrap/InputGroup";
 import ChatCardKindredComponent from "../../components/ChatCardKindredComponent";
 import ChatBox from "../../components/ChatBox";
 import Header from "../../components/Header";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import FirebaseFirestoreService from "../../FirebaseFirestoreService";
+import UserContext from "../../UserContext";
 
 export default function MessagePage() {
-  const [isContactTrigger, setIsContactTrigger] = useState(true);
+  const { userData, chatUser } = useContext(UserContext);
+  const [text, setText] = useState("");
+  const [isContactTrigger, setIsContactTrigger] = useState(false);
+  const handleSendText = () => {
+    if (text.length > 0) {
+      FirebaseFirestoreService.createDocument("messageKijimarii", {
+        autor: userData?.uidAuthor,
+        receiver: chatUser?.uidAuthor,
+        createdAt: new Date(),
+        content: text,
+      });
+    }
+  };
+
+  const getAllMessages = () => {
+    if (chatUser?.uidAuthor && userData?.uidAuthor) {
+      const queries = {
+        field: "autor",
+        condition: "==",
+        value: "2",
+      };
+      FirebaseFirestoreService.readDocuments({
+        collection: "messageKijimarii",
+        queries: queries,
+      })
+        .then((data) => {
+          let dataForm = [];
+          data.docs.forEach((doc) => {
+            dataForm = [...dataForm, doc.data()];
+          });
+          console.log(dataForm, " :magicarpe");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  };
+  useEffect(() => {
+    getAllMessages();
+  }, []);
   return (
     <Container fluid>
       <Header />
@@ -96,11 +137,21 @@ export default function MessagePage() {
                 <Row>
                   <InputGroup>
                     <Form.Control
+                      value={text}
                       as="textarea"
                       aria-label="With textarea"
                       placeholder="Entrer votre message..."
+                      onChange={(e) => {
+                        setText(e.target.value);
+                      }}
                     />
-                    <Button>Envoyer</Button>
+                    <Button
+                      onClick={() => {
+                        handleSendText();
+                      }}
+                    >
+                      Envoyer
+                    </Button>
                   </InputGroup>
                 </Row>
               </Form>

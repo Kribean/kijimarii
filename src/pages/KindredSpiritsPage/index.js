@@ -20,15 +20,13 @@ export default function KindredSpiritsPage() {
         };
       });
       const tabQueries = queries?.filter((element) => element.value !== "");
-      console.log(userData, "okkkkkk1", queries, "okkkkkk2", tabQueries);
-
       FirebaseFirestoreService.readDocuments({
         collection: "userKijimarii",
         queries: tabQueries,
       })
         .then((data) => {
           const dataForm = data.docs[0].data();
-          console.log(dataForm, " :carapuce");
+          console.log(dataForm, " :carapuce", data.docs[0].id);
           setKinderedUserTab([...kinderedUserTab, dataForm]);
         })
         .catch((error) => {
@@ -43,8 +41,8 @@ export default function KindredSpiritsPage() {
       <Row>
         <h1 className="display-4">Liste de mes kindred soul</h1>
       </Row>
-      {kinderedUserTab?.map((element) => {
-        return <KindredCardComponent data={element} />;
+      {kinderedUserTab?.map((element, index) => {
+        return <KindredCardComponent key={index} data={element} />;
       })}
     </Container>
   );
