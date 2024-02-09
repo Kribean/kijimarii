@@ -1,6 +1,6 @@
 import { Container, Row } from "react-bootstrap";
 
-export default function ChatBox({ isUser, content, date }) {
+export default function ChatBox({ isUser, content, date, name }) {
   return (
     <Container
       className={
@@ -15,6 +15,12 @@ export default function ChatBox({ isUser, content, date }) {
       fluid
     >
       <Row>
+        <p
+          className="m-2 p-0 "
+          style={{ fontWeight: "bold", fontSize: "12px" }}
+        >
+          {name + ": "}
+        </p>
         <p className="m-2 p-0 text-break">{content}</p>
       </Row>
 

@@ -10,7 +10,9 @@ import UserContext from "../../UserContext";
 export default function MessagePage() {
   const { userData, chatUser } = useContext(UserContext);
   const [text, setText] = useState("");
+  const [chatAllMessage, setChatAllMessage] = useState([]);
   const [isContactTrigger, setIsContactTrigger] = useState(false);
+
   const handleSendText = () => {
     if (text.length > 0) {
       FirebaseFirestoreService.createDocument("messageKijimarii", {
@@ -18,63 +20,74 @@ export default function MessagePage() {
         receiver: chatUser?.uidAuthor,
         createdAt: new Date(),
         content: text,
-      });
-    }
-  };
-
-  const getAllMessages = () => {
-    if (chatUser?.uidAuthor && userData?.uidAuthor) {
-      const queries = {
-        operator: "OR",
-        conditions: [
-          {
-            operator: "AND",
-            conditions: [
-              {
-                field: "autor",
-                condition: "==",
-                value: userData?.uidAuthor,
-              },
-              {
-                field: "receiver",
-                condition: "==",
-                value: chatUser?.uidAuthor,
-              },
-            ],
-          },
-          {
-            operator: "AND",
-            conditions: [
-              {
-                field: "autor",
-                condition: "==",
-                value: chatUser?.uidAuthor,
-              },
-              {
-                field: "receiver",
-                condition: "==",
-                value: userData?.uidAuthor,
-              },
-            ],
-          },
-        ],
-      };
-      FirebaseFirestoreService.readDocuments({
-        collection: "messageKijimarii",
-        queries: queries,
       })
-        .then((data) => {
-          let dataForm = [];
-          data.docs.forEach((doc) => {
-            dataForm = [...dataForm, doc.data()];
-          });
-          console.log(dataForm, " :magicarpe");
+        .then((e) => {
+          setText("");
+          getAllMessages();
         })
         .catch((error) => {
           console.log(error);
         });
     }
   };
+
+  const getAllMessages = () => {
+    console.log("koulirou");
+    if (chatUser?.uidAuthor && userData?.uidAuthor) {
+      const querieIchi = [
+        {
+          field: "autor",
+          condition: "==",
+          value: userData?.uidAuthor,
+        },
+      ];
+      const querieNi = [
+        {
+          field: "autor",
+          condition: "==",
+          value: chatUser?.uidAuthor,
+        },
+      ];
+      const promise1 = FirebaseFirestoreService.readDocuments({
+        collection: "messageKijimarii",
+        queries: querieIchi,
+      });
+      const promise2 = FirebaseFirestoreService.readDocuments({
+        collection: "messageKijimarii",
+        queries: querieNi,
+      });
+      Promise.all([promise1, promise2])
+        .then((data) => {
+          let allMsg1 = data[0].docs.map((e) => e.data());
+          allMsg1 = allMsg1.filter((e) => {
+            return e.receiver === chatUser.uidAuthor;
+          });
+
+          let allMsg2 = data[1].docs.map((e) => e.data());
+          allMsg2 = allMsg2.filter((e) => {
+            return e.receiver === userData.uidAuthor;
+          });
+
+          let dataForm = [...allMsg1, ...allMsg2];
+          dataForm = dataForm.sort(
+            (a, b) => a.createdAt.seconds - b.createdAt.seconds
+          );
+          setChatAllMessage(dataForm);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  };
+
+  function secondsToDate(seconds) {
+    const date = new Date(seconds * 1000);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Les mois commencent à 0
+    const year = String(date.getFullYear()).slice(-2); // Obtenez les deux derniers chiffres de l'année
+    return `${day}/${month}/${year}`;
+  }
+
   useEffect(() => {
     getAllMessages();
   }, []);
@@ -126,41 +139,20 @@ export default function MessagePage() {
               style={{ height: "500px" }}
               className="overflow-scroll my-4 w-75 bg-chat "
             >
-              <ChatBox
-                isUser={true}
-                content={
-                  "bonjour, ça va je m'appelle Zack et toi comment ça va?"
-                }
-                date={"12/12/2024 12:00"}
-              />
-              <ChatBox
-                isUser={false}
-                content={
-                  "Salut, moi ça va Restabat ut Caesar post haec properaret accitus et abstergendae causa suspicionis sororem suam, eius uxorem, Constantius ad se tandem desideratam venire multis fictisque blanditiis hortabatur. quae licet ambigeret metuens saepe cruentum, spe tamen quod eum lenire poterit ut germanum profecta, cum Bithyniam introisset, in statione quae Caenos Gallicanos appellatur, absumpta est vi febrium repentina. cuius post obitum maritus contemplans cecidisse fiduciam qua se fultum existimabat, anxia cogitatione, quid moliretur haerebat."
-                }
-                date={"12/12/2024 12:00"}
-              />
-              <ChatBox
-                isUser={false}
-                content={
-                  "Salut, moi ça va Restabat ut Caesar post haec properaret accitus et abstergendae causa suspicionis sororem suam, eius uxorem, Constantius ad se tandem desideratam venire multis fictisque blanditiis hortabatur. quae licet ambigeret metuens saepe cruentum, spe tamen quod eum lenire poterit ut germanum profecta, cum Bithyniam introisset, in statione quae Caenos Gallicanos appellatur, absumpta est vi febrium repentina. cuius post obitum maritus contemplans cecidisse fiduciam qua se fultum existimabat, anxia cogitatione, quid moliretur haerebat."
-                }
-                date={"12/12/2024 12:00"}
-              />
-              <ChatBox
-                isUser={false}
-                content={
-                  "Salut, moi ça va Restabat ut Caesar post haec properaret accitus et abstergendae causa suspicionis sororem suam, eius uxorem, Constantius ad se tandem desideratam venire multis fictisque blanditiis hortabatur. quae licet ambigeret metuens saepe cruentum, spe tamen quod eum lenire poterit ut germanum profecta, cum Bithyniam introisset, in statione quae Caenos Gallicanos appellatur, absumpta est vi febrium repentina. cuius post obitum maritus contemplans cecidisse fiduciam qua se fultum existimabat, anxia cogitatione, quid moliretur haerebat."
-                }
-                date={"12/12/2024 12:00"}
-              />
-              <ChatBox
-                isUser={false}
-                content={
-                  "Salut, moi ça va Restabat ut Caesar post haec properaret accitus et abstergendae causa suspicionis sororem suam, eius uxorem, Constantius ad se tandem desideratam venire multis fictisque blanditiis hortabatur. quae licet ambigeret metuens saepe cruentum, spe tamen quod eum lenire poterit ut germanum profecta, cum Bithyniam introisset, in statione quae Caenos Gallicanos appellatur, absumpta est vi febrium repentina. cuius post obitum maritus contemplans cecidisse fiduciam qua se fultum existimabat, anxia cogitatione, quid moliretur haerebat."
-                }
-                date={"12/12/2024 12:00"}
-              />
+              {chatAllMessage.map((element) => {
+                return (
+                  <ChatBox
+                    name={
+                      element.autor === userData.uidAuthor
+                        ? "Moi"
+                        : chatUser.name
+                    }
+                    isUser={element.autor === userData.uidAuthor}
+                    content={element.content}
+                    date={secondsToDate(element.createdAt.seconds)}
+                  />
+                );
+              })}
             </div>
             <Row>
               <Form className="p-4 my-4 ">
