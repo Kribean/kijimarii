@@ -156,6 +156,7 @@ export default function MessagePage() {
               <ChatCardKindredComponent
                 key={index}
                 data={element}
+                isChatCard={false}
                 setIsContactTrigger={setIsContactTrigger}
                 getAllMessages={() => {
                   getAllMessages();
@@ -176,6 +177,7 @@ export default function MessagePage() {
           {chatUser?.uidAuthor && (
             <ChatCardKindredComponent
               data={chatUser}
+              isChatCard={true}
               setIsContactTrigger={setIsContactTrigger}
               getAllMessages={() => {
                 getAllMessages();
@@ -185,8 +187,8 @@ export default function MessagePage() {
           {chatUser?.uidAuthor ? (
             <Row className="justify-content-center align-items-center">
               <div
-                style={{ height: "500px" }}
-                className="overflow-scroll my-4 w-75 bg-chat "
+                style={{ height: "500px", width: "90%" }}
+                className="overflow-scroll my-4 bg-chat "
               >
                 {chatAllMessage.map((element, index) => {
                   return (

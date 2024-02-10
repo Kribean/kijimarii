@@ -9,14 +9,13 @@ import {
   ToastContainer,
 } from "react-bootstrap";
 import bookPng from "../assets/book.jpg";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import FirebaseFirestoreService from "../FirebaseFirestoreService";
 import UserContext from "../UserContext";
 import ImageUploadPreview from "./ImageUploadPreview";
 
 export default function FirstConnexionComponent() {
   const { userData, userDataId } = useContext(UserContext);
-
   const [showToast, setShowToast] = useState(false);
   const [age, setAge] = useState(userData?.age);
   const [description, setDescription] = useState(userData?.description);
@@ -38,8 +37,10 @@ export default function FirstConnexionComponent() {
     console.log(name, age, codePostal, description, codePostal);
     let tab = [];
     //check name
-    if (name.length < 3) {
-      tab = [...tab, "le prénom doit avoir plus de 2 lettres"];
+    if (name) {
+      if (name.length < 3) {
+        tab = [...tab, "le prénom doit avoir plus de 2 lettres"];
+      }
     }
     //check age
     if (age < 18) {
@@ -83,9 +84,32 @@ export default function FirstConnexionComponent() {
         "userKijimarii",
         userDataId,
         dataForm
-      );
+      )
+        .then(() => {
+          window.location.reload(false);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   };
+
+  useEffect(() => {
+    if (userData) {
+      setAge(userData?.age);
+      setDescription(userData?.description);
+      setIsMan(userData?.isMan);
+      setName(userData?.name);
+      setCodePostal(userData?.codePostal);
+      setCity(userData?.city);
+      setPerimeter(userData?.perimeter);
+      setImageUrl(userData?.imageUrl);
+      setTabHobbies(userData?.tabHobbies);
+      setReligion(userData?.religion);
+      setIsReligionRelevant(userData?.isReligionRelevant);
+    }
+  }, [userData]);
+
   return (
     <div className="bg-body-transp jumbotron jumbotron-fluid m-4">
       <div className="container ">
@@ -103,15 +127,15 @@ export default function FirstConnexionComponent() {
         </Row>
 
         <Form>
-          <div className="image-input-box">
-            Recipe Image
+          <Row className="text-center justify-content-center align-items-center m-0 p-0">
+            <p className="text-bold">Ajouter une image de profil</p>
             <ImageUploadPreview
               basePath="userKijimarii"
               existingImageUrl={imageUrl}
               handleUploadFinish={(downloadUrl) => setImageUrl(downloadUrl)}
               handleUploadCancel={() => setImageUrl("")}
             />
-          </div>
+          </Row>
 
           <Form.Group className="m-4" controlId="formBasicFirstName">
             <FloatingLabel
@@ -209,7 +233,9 @@ export default function FirstConnexionComponent() {
               }}
               placeholder="Entrer votre ville"
             />
-            <Form.Label>Mon périmètre de rencontre: {perimeter} km</Form.Label>
+            <Form.Label>
+              Mon périmètre de rencontre: {perimeter ? perimeter : 0} km
+            </Form.Label>
             <Form.Range
               value={perimeter}
               max={2000}

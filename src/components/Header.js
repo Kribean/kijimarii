@@ -117,6 +117,7 @@ export default function Header() {
         setUserData(null);
         setUserDataId(null);
         localStorage.removeItem("kijimariiUid");
+        navigate("/");
       })
       .catch((error) => {
         console.log(error);
@@ -154,13 +155,14 @@ export default function Header() {
           <Row className="text-center justify-content-center align-items-center">
             <Col md={4} xs={12}>
               <Button
-                variant="dark"
+                variant="secondary"
+                className="my-4"
                 onClick={() => {
                   handleGoToDashboard();
                 }}
               >
                 <p
-                  style={{ fontSize: "72px" }}
+                  style={{ fontSize: "42px" }}
                   className="lead m-0 textWinterSoul"
                 >
                   Kijimarii
@@ -257,19 +259,46 @@ export default function Header() {
           )}
         </Col>
       </Row>
-      {userData?.tabInterested.length > 0 && (
-        <Row className="m-4">
-          <Alert variant="info">
-            <Alert.Heading>Hey, ça y'est!</Alert.Heading>
+
+      <Row className="m-4">
+        <Alert variant="info">
+          <Alert.Heading>
+            {userData?.tabInterested.length > 0
+              ? "Hey, ça y'est!"
+              : "Il n' y a pas encore de contacts"}
+          </Alert.Heading>
+          {userData?.tabInterested.length > 0 ? (
             <p>
               Dans la section mes contacts vous trouverez de nouvelles personnes
               intéréssés par ton profil
             </p>
-            <hr />
-            <Button>Mes contacts</Button>
-          </Alert>
-        </Row>
-      )}
+          ) : (
+            <p>
+              Pour l'instant vous n'avez pas encore de contacts. Continuez à
+              partager votre profil à vos ami(e)s de confiance, bienveillant.
+              L'expérience continue.
+            </p>
+          )}
+          <hr />
+          {userData?.tabInterested.length > 0 ? (
+            <Button
+              onClick={() => {
+                navigate("/list-contacts");
+              }}
+            >
+              Mes contacts
+            </Button>
+          ) : (
+            <Button
+              onClick={() => {
+                navigate("/user-send-request");
+              }}
+            >
+              Partager mon profil
+            </Button>
+          )}
+        </Alert>
+      </Row>
     </>
   );
 }

@@ -26,13 +26,13 @@ export default function KindredSpiritsPage() {
       })
         .then((data) => {
           const dataForm = data.docs[0].data();
-          console.log(dataForm, " :carapuce", data.docs[0].id);
           setKinderedUserTab([...kinderedUserTab, dataForm]);
         })
         .catch((error) => {
           console.log(error);
         });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userData]);
 
   return (

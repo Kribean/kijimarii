@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 export default function ProfileCompletedComponent({
   percentageProfilCompleted,
 }) {
-  console.log("fuuton", percentageProfilCompleted);
   const navigate = useNavigate();
   const handleGoToProfile = () => {
     navigate("/profil");
@@ -13,10 +12,15 @@ export default function ProfileCompletedComponent({
     navigate("/user-send-request");
   };
   return (
-    <Row>
-      <p className="lead"> Profil non créé</p>
+    <Row className="m-4">
       <Row className="justify-content-center align-items-center">
         <Col xs={6}>
+          <p className="lead">
+            {" "}
+            {percentageProfilCompleted < 100
+              ? "Profil incomplet, n'oubliez pas de le compléter à 100%"
+              : "Profil complété à 100%"}
+          </p>
           <ProgressBar
             variant={percentageProfilCompleted < 100 ? "warning" : "succeed"}
             animated
@@ -32,7 +36,7 @@ export default function ProfileCompletedComponent({
               handleGoToProfile();
             }}
           >
-            Créer mon profil
+            Modifier ou compléter mon profil
           </Button>
           <Button
             variant="success"

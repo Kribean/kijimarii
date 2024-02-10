@@ -49,7 +49,7 @@ export default function LoginPage() {
             tabHobbies: "",
             religion: "",
             isReligionRelevant: false,
-            agePartnerMin: 35,
+            agePartnerMin: 19,
             agePartnerMax: 35,
             tabHumanValues: "",
             descriptionPartner: "",
