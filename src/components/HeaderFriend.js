@@ -34,6 +34,7 @@ export default function HeaderFriend() {
           console.log(error);
         });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <Row className="bg-dark text-white text-center justify-content-center align-items-center">
