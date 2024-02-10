@@ -7,7 +7,7 @@ import {
 } from "react-bootstrap";
 
 import ClipBoardComponent from "../../components/ClipBoardComponent";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import UserCardComponent from "../../components/UserCardComponent";
 import HeaderFriend from "../../components/HeaderFriend";
 import FinishComponent from "../../components/FinishComponent";
@@ -16,6 +16,11 @@ import UserContext from "../../UserContext";
 export default function ShareFriendToFriendPage() {
   const { emitterData } = useContext(UserContext);
   const [show, setShow] = useState(false);
+  const [seePage, setSeePage] = useState(true);
+
+  useEffect(() => {
+    setSeePage(emitterData?.isSessionActive);
+  }, [emitterData]);
 
   return (
     <Container
@@ -23,7 +28,7 @@ export default function ShareFriendToFriendPage() {
       fluid
     >
       <HeaderFriend />
-      {emitterData?.isSessionActive ? (
+      {seePage ? (
         <>
           <div className="bg-body-transp jumbotron jumbotron-fluid m-4">
             <div className="container justify-content-center">

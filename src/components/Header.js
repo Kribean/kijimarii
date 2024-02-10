@@ -9,7 +9,7 @@ import {
 } from "react-bootstrap";
 import mailSvg from "../assets/mail-svg.svg";
 import { useEffect, useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import FirebaseAuthService from "../FirebaseAuthService";
 import UserContext from "../UserContext";
 import FirebaseFirestoreService from "../FirebaseFirestoreService";
@@ -232,7 +232,7 @@ export default function Header() {
                 handleGoToMsg();
               }}
             >
-              <Image src={mailSvg} width="24" height="24" alt="" />
+              <Image src={mailSvg} width="24" height="24" alt="profil" />
               <span className="badge badge-primary">Chat</span>
             </Button>
           </OverlayTrigger>
@@ -257,6 +257,14 @@ export default function Header() {
               Se déconnecter
             </Button>
           )}
+          <Link
+            className="btn btn-secondary"
+            to="https://forms.gle/1uqYKdN2G8C7uB3k7"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Supprimer mon profil
+          </Link>
         </Col>
       </Row>
 

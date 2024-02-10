@@ -9,7 +9,7 @@ import {
 } from "react-bootstrap";
 import googleImg from "../../assets/google-svg.svg";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import UserCardComponent from "../../components/UserCardComponent";
 import doorPng from "../../assets/key.jpg";
 import HeaderFriend from "../../components/HeaderFriend";
@@ -22,7 +22,6 @@ import FirebaseFirestoreService from "../../FirebaseFirestoreService";
 
 export default function ShareToKindredPage() {
   const { emitterData, setUserData, emitterDataId } = useContext(UserContext);
-  console.log("emitterData: ", emitterData);
   const navigate = useNavigate();
   const handleNavigation = () => {
     navigate("/home-user/?uuid=5646-e");
@@ -30,6 +29,7 @@ export default function ShareToKindredPage() {
 
   const [modalShow, setModalShow] = useState(false);
   const [nextPage, setNextPage] = useState(false);
+  const [seePage, setSeePage] = useState(true);
 
   const recordInterestInUser = (response) => {
     if (!emitterData?.tabInterested.includes(response?.user.uid)) {
@@ -100,6 +100,11 @@ export default function ShareToKindredPage() {
       alert(error.message);
     }
   }
+
+  useEffect(() => {
+    setSeePage(emitterData?.isSessionActive);
+  }, [emitterData]);
+
   FirebaseAuthService.subscribeToAuthChanges(setUserData);
 
   return (
@@ -108,7 +113,7 @@ export default function ShareToKindredPage() {
       fluid
     >
       <HeaderFriend />
-      {emitterData?.isSessionActive ? (
+      {seePage ? (
         <>
           {!nextPage ? (
             <div className="bg-body-transp jumbotron jumbotron-fluid m-4">

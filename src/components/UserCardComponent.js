@@ -1,5 +1,4 @@
 import { Card, Row, Col, Image, Container } from "react-bootstrap";
-import HallyBerryJpg from "../assets/Halle-Berry.jpg";
 import UserContext from "../UserContext";
 import { useContext } from "react";
 
@@ -13,7 +12,7 @@ export default function UserCardComponent() {
             <Image
               width={"200px"}
               alt="photo de profil"
-              src={HallyBerryJpg}
+              src={emitterData?.imageUrl}
               fluid
             />
           </Col>
