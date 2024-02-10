@@ -32,7 +32,7 @@ export default function LoginPage() {
           collection: "userKijimarii",
           queries: queries,
         });
-
+        //comment
         if (responseUser.docs.length === 0) {
           FirebaseFirestoreService.createDocument("userKijimarii", {
             uidAuthor: response?.user.uid,
