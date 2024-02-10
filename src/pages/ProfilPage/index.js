@@ -3,7 +3,6 @@ import {
   FloatingLabel,
   Form,
   Row,
-  Card,
   Badge,
   Toast,
   ToastContainer,
@@ -158,16 +157,14 @@ export default function ProfilPage() {
           />
         </Row>
         <Form>
-          <Row className="justify-content-center align-items-center m-0 p-0">
-            <div className="image-input-box">
-              Recipe Image
-              <ImageUploadPreview
-                basePath="userKijimarii"
-                existingImageUrl={imageUrl}
-                handleUploadFinish={(downloadUrl) => setImageUrl(downloadUrl)}
-                handleUploadCancel={() => setImageUrl("")}
-              />
-            </div>
+          <Row className="text-center justify-content-center align-items-center m-0 p-0">
+            <p className="text-bold">Ajouter une image de profil</p>
+            <ImageUploadPreview
+              basePath="userKijimarii"
+              existingImageUrl={imageUrl}
+              handleUploadFinish={(downloadUrl) => setImageUrl(downloadUrl)}
+              handleUploadCancel={() => setImageUrl("")}
+            />
           </Row>
 
           <Form.Group className="m-4" controlId="formBasicFirstName">
@@ -416,7 +413,6 @@ export default function ProfilPage() {
           className="w-100 text-white"
           bg={tabFormError.length > 0 ? "danger" : "success"}
           onClose={() => {
-            console.log("sa ferme");
             setTabFormError([]);
             setShowToast(false);
           }}

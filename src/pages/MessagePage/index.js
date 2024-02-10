@@ -12,6 +12,7 @@ export default function MessagePage() {
   const [text, setText] = useState("");
   const [chatAllMessage, setChatAllMessage] = useState([]);
   const [isContactTrigger, setIsContactTrigger] = useState(false);
+  const [kinderedUserTab, setKinderedUserTab] = useState([]);
 
   const handleSendText = () => {
     if (text.length > 0) {
@@ -32,7 +33,6 @@ export default function MessagePage() {
   };
 
   const getAllMessages = () => {
-    console.log("koulirou");
     if (chatUser?.uidAuthor && userData?.uidAuthor) {
       const querieIchi = [
         {
@@ -90,7 +90,35 @@ export default function MessagePage() {
 
   useEffect(() => {
     getAllMessages();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (userData?.tabInterested) {
+      const tabInterested = userData?.tabInterested;
+      const queries = tabInterested?.map((element) => {
+        return {
+          field: "uidAuthor",
+          condition: "==",
+          value: element,
+        };
+      });
+      const tabQueries = queries?.filter((element) => element.value !== "");
+      FirebaseFirestoreService.readDocuments({
+        collection: "userKijimarii",
+        queries: tabQueries,
+      })
+        .then((data) => {
+          const dataForm = data.docs[0].data();
+          setKinderedUserTab([...kinderedUserTab, dataForm]);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userData]);
+
   return (
     <Container fluid>
       <Header />
@@ -123,62 +151,93 @@ export default function MessagePage() {
           xs={isContactTrigger ? 12 : 2}
           className={!isContactTrigger ? "d-none" : "d-block"}
         >
-          <ChatCardKindredComponent setIsContactTrigger={setIsContactTrigger} />
-          <ChatCardKindredComponent setIsContactTrigger={setIsContactTrigger} />
+          {kinderedUserTab?.map((element, index) => {
+            return (
+              <ChatCardKindredComponent
+                key={index}
+                data={element}
+                setIsContactTrigger={setIsContactTrigger}
+                getAllMessages={() => {
+                  getAllMessages();
+                }}
+              />
+            );
+          })}
         </Col>
         <Col
           xs={!isContactTrigger ? 12 : 2}
           className={isContactTrigger ? "d-none" : "d-block "}
         >
-          <Row>
-            <h1 className="display-4"> Discussion</h1>
-          </Row>
-          <ChatCardKindredComponent setIsContactTrigger={setIsContactTrigger} />
-          <Row className="justify-content-center align-items-center">
-            <div
-              style={{ height: "500px" }}
-              className="overflow-scroll my-4 w-75 bg-chat "
-            >
-              {chatAllMessage.map((element) => {
-                return (
-                  <ChatBox
-                    name={
-                      element.autor === userData.uidAuthor
-                        ? "Moi"
-                        : chatUser.name
-                    }
-                    isUser={element.autor === userData.uidAuthor}
-                    content={element.content}
-                    date={secondsToDate(element.createdAt.seconds)}
-                  />
-                );
-              })}
-            </div>
+          {chatUser?.uidAuthor && (
             <Row>
-              <Form className="p-4 my-4 ">
-                <Row>
-                  <InputGroup>
-                    <Form.Control
-                      value={text}
-                      as="textarea"
-                      aria-label="With textarea"
-                      placeholder="Entrer votre message..."
-                      onChange={(e) => {
-                        setText(e.target.value);
-                      }}
-                    />
-                    <Button
-                      onClick={() => {
-                        handleSendText();
-                      }}
-                    >
-                      Envoyer
-                    </Button>
-                  </InputGroup>
-                </Row>
-              </Form>
+              <h1 className="display-4"> Discussion</h1>
             </Row>
-          </Row>
+          )}
+          {chatUser?.uidAuthor && (
+            <ChatCardKindredComponent
+              data={chatUser}
+              setIsContactTrigger={setIsContactTrigger}
+              getAllMessages={() => {
+                getAllMessages();
+              }}
+            />
+          )}
+          {chatUser?.uidAuthor ? (
+            <Row className="justify-content-center align-items-center">
+              <div
+                style={{ height: "500px" }}
+                className="overflow-scroll my-4 w-75 bg-chat "
+              >
+                {chatAllMessage.map((element, index) => {
+                  return (
+                    <ChatBox
+                      key={index}
+                      name={
+                        element.autor === userData.uidAuthor
+                          ? "Moi"
+                          : chatUser.name
+                      }
+                      isUser={element.autor === userData.uidAuthor}
+                      content={element.content}
+                      date={secondsToDate(element.createdAt.seconds)}
+                    />
+                  );
+                })}
+              </div>
+              <Row>
+                <Form className="p-4 my-4 ">
+                  <Row>
+                    <InputGroup>
+                      <Form.Control
+                        value={text}
+                        as="textarea"
+                        aria-label="With textarea"
+                        placeholder="Entrer votre message..."
+                        onChange={(e) => {
+                          setText(e.target.value);
+                        }}
+                      />
+                      <Button
+                        onClick={() => {
+                          handleSendText();
+                        }}
+                      >
+                        Envoyer
+                      </Button>
+                    </InputGroup>
+                  </Row>
+                </Form>
+              </Row>
+            </Row>
+          ) : (
+            <Row className="justify-content-center align-items-center">
+              <p className="lead">
+                {" "}
+                Il faudrait que vous sélectionner un contact. Cliquer sur
+                l'onglet Contacts{" "}
+              </p>
+            </Row>
+          )}
         </Col>
       </Row>
     </Container>

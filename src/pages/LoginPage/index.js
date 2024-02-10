@@ -69,7 +69,6 @@ export default function LoginPage() {
     } catch (error) {
       alert(error.message);
     } finally {
-      console.log("suya");
       if (response?.user) {
         window.localStorage.setItem("kijimariiUid", response.user.uid);
         handleNavigation();

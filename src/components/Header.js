@@ -24,7 +24,6 @@ export default function Header() {
   } = useContext(UserContext);
   const [popoverMyContacts, setPopoverMyContacts] = useState(false);
   const [popoverMyMails, setPopoverMyMails] = useState(false);
-  const [helpIsActive, setHelpIsActive] = useState();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -100,8 +99,7 @@ export default function Header() {
       setPopoverMyMails(true);
       setPopoverMyContacts(true);
     }, 500);
-
-    setHelpIsActive(userData?.showFirstConnexion);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleGoToListContact = () => {
@@ -135,13 +133,19 @@ export default function Header() {
       dataForm
     )
       .then(() => {
-        console.log("pannel d'aide plus visible");
-        setHelpIsActive(false);
+        console.log("succeed");
       })
       .catch((error) => {
         console.log(error);
       });
   };
+
+  useEffect(() => {
+    if (popoverMyMails && popoverMyContacts) {
+      handleChangeStatusFirstConnexion();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [popoverMyMails, popoverMyContacts]);
 
   return (
     <>
@@ -165,8 +169,8 @@ export default function Header() {
             </Col>
             <Col md={8} xs={12}>
               <OverlayTrigger
-                show={popoverMyContacts}
-                defaultShow={helpIsActive}
+                show={popoverMyContacts && userData?.showFirstConnexion}
+                defaultShow={userData?.showFirstConnexion}
                 trigger={["hover", "click"]}
                 delay={0}
                 placement="bottom"
@@ -199,9 +203,9 @@ export default function Header() {
         </Col>
         <Col md={6} xs={12}>
           <OverlayTrigger
-            show={popoverMyMails}
+            show={popoverMyMails && userData?.showFirstConnexion}
             trigger={["hover", "click"]}
-            defaultShow={helpIsActive}
+            defaultShow={userData?.showFirstConnexion}
             placement="auto-start"
             delay={0}
             overlay={
@@ -227,7 +231,7 @@ export default function Header() {
               }}
             >
               <Image src={mailSvg} width="24" height="24" alt="" />
-              <span className="badge badge-primary">9</span>
+              <span className="badge badge-primary">Chat</span>
             </Button>
           </OverlayTrigger>
           {!userData ? (
@@ -253,17 +257,19 @@ export default function Header() {
           )}
         </Col>
       </Row>
-      <Row className="m-4">
-        <Alert variant="info">
-          <Alert.Heading>Hey, ça y'est!</Alert.Heading>
-          <p>
-            Dans la section mes contacts vous trouverez de nouvelles personnes
-            intéréssés par ton profil
-          </p>
-          <hr />
-          <Button>Mes contacts</Button>
-        </Alert>
-      </Row>
+      {userData?.tabInterested.length > 0 && (
+        <Row className="m-4">
+          <Alert variant="info">
+            <Alert.Heading>Hey, ça y'est!</Alert.Heading>
+            <p>
+              Dans la section mes contacts vous trouverez de nouvelles personnes
+              intéréssés par ton profil
+            </p>
+            <hr />
+            <Button>Mes contacts</Button>
+          </Alert>
+        </Row>
+      )}
     </>
   );
 }

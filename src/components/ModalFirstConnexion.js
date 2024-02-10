@@ -1,11 +1,8 @@
 import { Button, Modal, Image, FloatingLabel, Form } from "react-bootstrap";
 import bookPng from "../assets/book.jpg";
-import { useState } from "react";
 
 export default function ModalFirstConnexion(props) {
-  const [name, setName] = useState("");
   const handleRegister = () => {
-    console.log("enregistrer nom", name);
     props.onHide();
   };
 

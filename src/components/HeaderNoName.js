@@ -6,8 +6,7 @@ import { useContext, useEffect } from "react";
 import FirebaseFirestoreService from "../FirebaseFirestoreService";
 
 export default function HeaderNoName() {
-  const { userData, setUserData, userDataId, setUserDataId } =
-    useContext(UserContext);
+  const { userData, setUserData, setUserDataId } = useContext(UserContext);
   const navigate = useNavigate();
 
   const handleGoToDashboard = () => {
@@ -28,7 +27,6 @@ export default function HeaderNoName() {
 
   useEffect(() => {
     if (window.localStorage.getItem("kijimariiUid")) {
-      console.log("je suis rentré dans le truc");
       const queries = [
         {
           field: "uidAuthor",
@@ -48,6 +46,7 @@ export default function HeaderNoName() {
           console.log(error);
         });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <Row className="bg-dark text-white text-center justify-content-center align-items-center">

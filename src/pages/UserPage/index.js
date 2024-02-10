@@ -1,7 +1,7 @@
-import { Badge, Button, Card, Container, Form, Row } from "react-bootstrap";
+import { Badge, Button, Card, Container, Row } from "react-bootstrap";
 import Header from "../../components/Header";
 import ProfileCompletedComponent from "../../components/ProfileCompletedComponent";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import FirstConnexionComponent from "../../components/FirstConnexionComponent";
 import HeaderNoName from "../../components/HeaderNoName";
 
@@ -15,7 +15,6 @@ export default function UserPage() {
     useContext(UserContext);
 
   const handleChangeStatusIsSession = () => {
-    console.log("dooooooooooooo");
     const dataForm = {
       isSessionActive: !userData.isSessionActive,
     };
@@ -25,7 +24,6 @@ export default function UserPage() {
       dataForm
     )
       .then(() => {
-        console.log("aquiiiiii");
         navigate("/experience-status");
       })
       .catch((error) => {

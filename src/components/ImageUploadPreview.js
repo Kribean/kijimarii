@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 import FirebaseStorageService from "../FirebaseStorageService";
+import { Col, Row } from "react-bootstrap";
 
 function ImageUploadPreview({
   basePath,
@@ -61,10 +62,11 @@ function ImageUploadPreview({
   }
 
   return (
-    <div className="image-upload-preview-container">
+    <Row>
       <input
         type="file"
         accept="image/*"
+        className="form-control"
         onChange={handleFileChanged}
         ref={fileInputRef}
         hidden={uploadProgress > -1 || imageUrlComp}
@@ -72,25 +74,40 @@ function ImageUploadPreview({
       {!imageUrlComp && uploadProgress > -1 ? (
         <div>
           <label htmlFor="file">Upload Progress:</label>
-          <progress id="file" value={uploadProgress} max="100">
+          <progress
+            id="file"
+            value={uploadProgress}
+            max="100"
+            className="progress-bar progress-bar-striped"
+          >
             {uploadProgress}%
           </progress>
           <span>{uploadProgress}%</span>
         </div>
       ) : null}
       {imageUrlComp ? (
-        <div className="image-preview">
-          <img src={imageUrlComp} alt={imageUrlComp} className="image" />
-          <button
-            type="button"
-            onClick={handleCancelImageClick}
-            className="primary-button"
-          >
-            Cancel Image
-          </button>
-        </div>
+        <Row>
+          <Row>
+            <Col xs={12} md={6} lg={4}>
+              <img
+                src={imageUrlComp}
+                alt={"imagedu profil"}
+                className="img-fluid img-thumbnail"
+              />
+            </Col>
+          </Row>
+          <Row>
+            <button
+              type="button"
+              onClick={handleCancelImageClick}
+              className="btn btn-danger"
+            >
+              Changer l'image de profil
+            </button>
+          </Row>
+        </Row>
       ) : null}
-    </div>
+    </Row>
   );
 }
 

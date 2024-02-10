@@ -4,7 +4,6 @@ import {
   FloatingLabel,
   Form,
   Row,
-  Card,
   Badge,
   Toast,
   ToastContainer,
@@ -16,7 +15,7 @@ import UserContext from "../UserContext";
 import ImageUploadPreview from "./ImageUploadPreview";
 
 export default function FirstConnexionComponent() {
-  const { userData, setUserData, userDataId } = useContext(UserContext);
+  const { userData, userDataId } = useContext(UserContext);
 
   const [showToast, setShowToast] = useState(false);
   const [age, setAge] = useState(userData?.age);
@@ -293,7 +292,6 @@ export default function FirstConnexionComponent() {
           className="w-100 text-white"
           bg={tabFormError.length > 0 ? "danger" : "success"}
           onClose={() => {
-            console.log("sa ferme");
             setTabFormError([]);
             setShowToast(false);
           }}
