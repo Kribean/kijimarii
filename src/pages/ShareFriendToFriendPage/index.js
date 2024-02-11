@@ -100,7 +100,7 @@ export default function ShareFriendToFriendPage() {
                       </h2>
                     </Accordion.Header>
                     <Accordion.Body>
-                      <p class="lead">
+                      <p className="lead">
                         Partagez avec des ami(e)s de confiance et bienveillants
                         qui pourraient également contribuer à cette expérience
                         unique.

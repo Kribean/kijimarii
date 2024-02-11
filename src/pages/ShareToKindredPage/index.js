@@ -24,7 +24,7 @@ export default function ShareToKindredPage() {
   const { emitterData, setUserData, emitterDataId } = useContext(UserContext);
   const navigate = useNavigate();
   const handleNavigation = () => {
-    navigate("/home-user/?uuid=5646-e");
+    navigate("/home-user");
   };
 
   const [modalShow, setModalShow] = useState(false);
@@ -63,6 +63,18 @@ export default function ShareToKindredPage() {
         showFirstConnexion: true,
         tabInterested: ["", emitterData.uidAuthor],
       });
+    } else {
+      //ici si j'ai déjà mon compte, je peux etre ajouter a la liste des gens a qui je peux parler
+      const dataUser = responseUser?.docs[0].data();
+      if (!dataUser?.tabInterested.includes(emitterData.uidAuthor)) {
+        FirebaseFirestoreService.updateDocument(
+          "userKijimarii",
+          responseUser?.docs[0].id,
+          {
+            tabInterested: [...dataUser.tabInterested, emitterData.uidAuthor],
+          }
+        );
+      }
     }
   };
 
@@ -90,6 +102,7 @@ export default function ShareToKindredPage() {
           createInterestedDoc(response, responseUser),
         ])
           .then(() => {
+            window.localStorage.setItem("kijimariiUid", response.user.uid);
             handleNavigation();
           })
           .catch((error) => {
